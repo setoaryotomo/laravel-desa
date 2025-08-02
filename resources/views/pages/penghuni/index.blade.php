@@ -37,6 +37,9 @@
                             <td>{{ \Carbon\Carbon::parse($penghuni->tgl_lahir)->format('d/m/Y') }}</td>
                             <td>
                                 <div class="d-flex">
+                                    <a href="{{ route('penghuni.anggotakeluarga.index', ['rumah' => $penghuni->rumah_id, 'penghuni' => $penghuni->id]) }}" class="d-inline-block mr-2 btn btn-sm btn-info">
+                                        <i class="fas fa-user"></i> Anggota
+                                    </a>
                                     {{-- @if($penghuni->rumah) --}}
                                         <a href="{{ route('rumah.penghuni.edit', ['rumah' => $penghuni->rumah_id, 'penghuni' => $penghuni->id]) }}" 
                                            class="d-inline-block mr-2 btn btn-sm btn-warning">

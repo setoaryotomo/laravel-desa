@@ -1,7 +1,7 @@
 <!-- Modal -->
-  <div class="modal fade" id="confirmationDelete-{{ $penghuni->id }}" tabindex="-1" aria-labelledby="confirmationDeleteLabel" aria-hidden="true">
+  <div class="modal fade" id="confirmationDelete-{{ $anggotakeluarga->id }}" tabindex="-1" aria-labelledby="confirmationDeleteLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="{{ route('rumah.penghuni.destroy',['rumah' => $penghuni->rumah_id, 'penghuni' => $penghuni->id]) }}" method="post">
+        <form action="{{ route('penghuni.anggotakeluarga.destroy', ['rumah' => $rumah->id, 'penghuni' => $penghuni->id,$anggotakeluarga->id]) }}" method="post">
             @csrf
             @method('DELETE')
       <div class="modal-content">

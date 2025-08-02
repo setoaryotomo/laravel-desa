@@ -2,6 +2,13 @@
 @extends('layouts.app')
 
 @section('content')
+
+<style>
+    form label{
+      font-weight:bold;
+    }
+</style>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-16">
@@ -129,7 +136,7 @@
                                 <div class="mb-2">
                                     <img src="{{ asset('storage/' . $rumah->foto_tampak_depan) }}" 
                                          class="img-thumbnail" style="max-width: 300px;">
-                                    <div class="form-check mt-2">
+                                    <div class="form-check mt-2" style="display: none">
                                         <input class="form-check-input" type="checkbox" 
                                                id="hapus_foto" name="hapus_foto">
                                         <label class="form-check-label" for="hapus_foto">
@@ -149,7 +156,7 @@
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="reset" class="btn btn-secondary me-md-2">Reset Perubahan</button>
+                            {{-- <button type="reset" class="btn btn-secondary me-md-2">Reset Perubahan</button> --}}
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         </div>
                     </form>

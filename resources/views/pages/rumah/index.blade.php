@@ -5,7 +5,7 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Data Rumah</h1>
         <a href="/rumah/create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-plus fa-sm text-white-50"></i> Tambah Data</a>
+                class="fas fa-plus fa-sm text-white-50"></i> Tambah Rumah</a>
     </div>
     <div class="row">
         <div class="col">
@@ -18,7 +18,7 @@
                             <th>Alamat</th>
                             <th>RT/RW</th>
                             <th>No Rumah</th>
-                            <th>Nama</th>
+                            {{-- <th>Nama</th> --}}
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -29,18 +29,21 @@
                             <td>{{ $rumah->alamat_lengkap }} No. {{ $rumah->no_rumah }}</td>
                             <td>{{ $rumah->rt }}/{{ $rumah->rw }}</td>
                             <td>{{ $rumah->no_rumah}}</td>
-                            <td>{{ $rumah->sertifikat_an }}</td>
+                            {{-- <td>{{ $rumah->sertifikat_an }}</td> --}}
                             {{-- <td><img src="{{ asset('storage/' . $rumah->foto_tampak_depan) }}" alt=""></td> --}}
                             <td>
                                 <div class="d-flex">
+                                    <a href="{{ route('rumah.penghuni.index', $rumah->id) }}" class="d-inline-block mr-2 btn btn-sm btn-info">
+                                        <i class="fas fa-user"></i> Penghuni
+                                    </a>
                                     <a href="{{ route('rumah.edit', $rumah->id) }}" class="d-inline-block mr-2 btn btn-sm btn-warning">
-                                        <i class="fas fa-pen"></i>
+                                        <i class="fas fa-pen"></i> Edit
                                     </a>
                                     {{-- <a href="{{ route('rumah.delete', $rumah->id) }}" class="btn btn-sm btn-danger">
                                         <i class="fas fa-eraser"></i>
                                     </a> --}}
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationDelete-{{ $rumah->id }}">
-                                        <i class="fas fa-eraser"></i>
+                                        <i class="fas fa-eraser"></i> Delete
                                     </button>
                                 </div>
                                 {{-- <a href="{{ route('rumah.edit', $rumah->id) }}" class="btn btn-info btn-sm">Detail</a> --}}

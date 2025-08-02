@@ -2,6 +2,13 @@
 @extends('layouts.app')
 
 @section('content')
+
+<style>
+    form label{
+      font-weight:bold;
+    }
+</style>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-16">
@@ -124,7 +131,7 @@
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="reset" class="btn btn-secondary me-md-2">Reset</button>
+                            {{-- <button type="reset" class="btn btn-secondary me-md-2">Reset</button> --}}
                             <button type="submit" class="btn btn-primary">Simpan Data</button>
                         </div>
                     </form>

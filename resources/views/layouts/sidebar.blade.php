@@ -1,3 +1,41 @@
+@php
+    $menus = [
+        1 => [
+            (object) [
+                'title' => 'Dashboard',
+                'path' => 'dashboard',
+                'icon' => 'fas fa-fw fa-tachometer-alt',
+            ],
+            (object) [
+                'title' => 'Rumah',
+                'path' => 'rumah',
+                'icon' => 'fas fa-fw fa-home',
+            ],
+            (object) [
+                'title' => 'List Akun',
+                'path' => 'account-list',
+                'icon' => 'fas fa-fw fa-user',
+            ],
+            (object) [
+                'title' => 'Permintaan Akun',
+                'path' => 'account-request',
+                'icon' => 'fas fa-fw fa-user',
+            ],
+        ],
+        2 => [
+            (object) [
+                'title' => ' Dashboard',
+                'path' => 'dashboard',
+                'icon' => 'fas fa-fw fa-tachometer-alt',
+            ],
+            // (object) [
+            //     'title' =>'Rumah',
+            //     'path' => 'rumah',
+            //     'icon' => 'fas fa-fw fa-home',
+            // ],
+        ],
+    ];
+@endphp
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -12,27 +50,32 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    {{-- <li class="nav-item active">
         <a class="nav-link" href="index.html">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
-    </li>
+    </li> --}}
 
     <!-- Divider -->
-    <hr class="sidebar-divider">
+    {{-- <hr class="sidebar-divider"> --}}
 
     <!-- Heading -->
-    <div class="sidebar-heading">
+    {{-- <div class="sidebar-heading">
         Manajemen Data
-    </div>
+    </div> --}}
 
-    
+
     <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="/rumah">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Rumah</span></a>
-    </li>
+    @auth
+        @foreach ($menus[auth()->user()->role_id] as $menu)
+            <li class="nav-item {{ request()->is($menu->path . '*') ? 'active' : '' }}">
+                <a class="nav-link" href="/{{ $menu->path }}">
+                    <i class="{{ $menu->icon }}"></i>
+                    <span>{{ $menu->title }}</span></a>
+            </li>
+        @endforeach
+    @endauth
+
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
@@ -42,6 +85,6 @@
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 
-   
+
 
 </ul>

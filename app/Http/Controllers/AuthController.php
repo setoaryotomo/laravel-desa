@@ -10,14 +10,25 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function login() {
+        if (Auth::check()) {
+            return back();
+        }
         return view('pages.auth.login');
     }
 
 
     public function authenticate(Request $request) {
+        if (Auth::check()) {
+            return back();
+        }
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+        ], [
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Email tidak valid',
+            'password.required' => 'Password harus diisi',
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -28,8 +39,10 @@ class AuthController extends Controller
 
             // dd(Auth::user());
             if($userStatus == 'submited'){
+                $this->_logout($request);
                 return back()->withErrors(['email' => 'Akun anda belum disetujui']);
             } else if($userStatus == 'rejected'){
+                $this->_logout($request);
                 return back()->withErrors(['email' => 'Akun anda ditolak']);
             }
  
@@ -43,10 +56,16 @@ class AuthController extends Controller
 
 
     public function registerView() {
+        if (Auth::check()) {
+            return back();
+        }
         return view('pages.auth.register');
     }
 
     public function register(Request $request) {
+        if (Auth::check()) {
+            return back();
+        }
         $validated = $request->validate([
             'name' => ['required'],
             'email' => ['required', 'email'],
@@ -63,13 +82,20 @@ class AuthController extends Controller
         return redirect('/')->with('success','Berhasil daftar akun, tunggu persetujuan');
     }
 
-    public function logout(Request $request)
-    {
+    public function _logout(Request $request) {
         Auth::logout();
      
         $request->session()->invalidate();
      
         $request->session()->regenerateToken();
+    }
+
+    public function logout(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $this->_logout($request);
      
         return redirect('/');
     }

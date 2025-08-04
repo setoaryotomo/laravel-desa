@@ -3,7 +3,9 @@
 use App\Http\Controllers\AnggotakeluargaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PenghuniController;
+use App\Http\Controllers\PortalController;
 use App\Http\Controllers\RumahController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Route Utama
@@ -11,8 +13,11 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+Route::get('/', [PortalController::class, 'homepage']);
+
 // Auth
-Route::get('/', [AuthController::class, 'login']);
+// Route::get('/', [AuthController::class, 'login']);
+Route::get('/login', [AuthController::class, 'login']);
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/register', [AuthController::class, 'registerView']);
@@ -21,10 +26,10 @@ Route::post('/register', [AuthController::class, 'register']);
 // Route Dashboard
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
-})->name('dashboard');
+})->name('dashboard')->middleware('role:Admin,User');
 
 // Route untuk Rumah
-Route::prefix('rumah')->group(function () {
+Route::prefix('rumah')->middleware('role:Admin,User')->group(function () {
     Route::get('/', [RumahController::class, 'index'])->name('rumah.index');
     Route::get('/create', [RumahController::class, 'create'])->name('rumah.create');
     Route::post('/', [RumahController::class, 'store'])->name('rumah.store');
@@ -55,3 +60,13 @@ Route::prefix('rumah')->group(function () {
         Route::delete('/{anggotakeluarga}', [AnggotakeluargaController::class, 'destroy'])->name('penghuni.anggotakeluarga.destroy');
     });
 });
+
+Route::get('/account-list', [UserController::class, 'account_list_view'])->middleware('role:Admin');
+
+Route::get('/account-request', [UserController::class, 'account_request_view'])->middleware('role:Admin');
+Route::post('/account-request/approval/{id}', [UserController::class, 'account_approval'])->middleware('role:Admin');
+
+Route::get('/profile', [UserController::class, 'profile_view'])->middleware('role:Admin,User');
+Route::post('/profile/{id}', [UserController::class, 'update_profile'])->middleware('role:Admin,User');
+Route::get('/change-password', [UserController::class, 'change_password_view'])->middleware('role:Admin,User');
+Route::post('/change-password/{id}', [UserController::class, 'change_password'])->middleware('role:Admin,User');

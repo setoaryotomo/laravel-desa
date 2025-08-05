@@ -12,6 +12,21 @@
                 'icon' => 'fas fa-fw fa-home',
             ],
             (object) [
+                'title' => 'Berita',
+                'path' => 'berita',
+                'icon' => 'fas fa-fw fa-newspaper',
+            ],
+            (object) [
+                'title' => 'Agenda',
+                'path' => 'agenda',
+                'icon' => 'fas fa-fw fa-calendar',
+            ],
+            (object) [
+                'title' => 'Gallery',
+                'path' => 'gallery',
+                'icon' => 'fas fa-fw fa-image',
+            ],
+            (object) [
                 'title' => 'List Akun',
                 'path' => 'account-list',
                 'icon' => 'fas fa-fw fa-user',

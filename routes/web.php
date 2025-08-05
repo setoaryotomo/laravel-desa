@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\AnggotakeluargaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PenghuniController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\RumahController;
@@ -61,8 +64,39 @@ Route::prefix('rumah')->middleware('role:Admin,User')->group(function () {
     });
 });
 
-Route::get('/account-list', [UserController::class, 'account_list_view'])->middleware('role:Admin');
 
+Route::prefix('berita')->middleware('role:Admin,User')->group(function () {
+    Route::get('/', [BeritaController::class, 'index'])->name('berita.index');
+    Route::get('/create', [BeritaController::class, 'create'])->name('berita.create');
+    Route::post('/', [BeritaController::class, 'store'])->name('berita.store');
+    Route::get('/{berita}', [BeritaController::class, 'show'])->name('berita.show');
+    Route::get('/{berita}/edit', [BeritaController::class, 'edit'])->name('berita.edit');
+    Route::put('/{berita}', [BeritaController::class, 'update'])->name('berita.update');
+    Route::delete('/{berita}', [BeritaController::class, 'destroy'])->name('berita.destroy');
+});
+
+Route::prefix('agenda')->middleware('role:Admin,User')->group(function () {
+    Route::get('/', [AgendaController::class, 'index'])->name('agenda.index');
+    Route::get('/create', [AgendaController::class, 'create'])->name('agenda.create');
+    Route::post('/', [AgendaController::class, 'store'])->name('agenda.store');
+    Route::get('/{agenda}', [AgendaController::class, 'show'])->name('agenda.show');
+    Route::get('/{agenda}/edit', [AgendaController::class, 'edit'])->name('agenda.edit');
+    Route::put('/{agenda}', [AgendaController::class, 'update'])->name('agenda.update');
+    Route::delete('/{agenda}', [AgendaController::class, 'destroy'])->name('agenda.destroy');
+});
+
+Route::prefix('gallery')->middleware('role:Admin,User')->group(function () {
+    Route::get('/', [GalleryController::class, 'index'])->name('gallery.index');
+    Route::get('/create', [GalleryController::class, 'create'])->name('gallery.create');
+    Route::post('/', [GalleryController::class, 'store'])->name('gallery.store');
+    Route::get('/{gallery}', [GalleryController::class, 'show'])->name('gallery.show');
+    Route::get('/{gallery}/edit', [GalleryController::class, 'edit'])->name('gallery.edit');
+    Route::put('/{gallery}', [GalleryController::class, 'update'])->name('gallery.update');
+    Route::delete('/{gallery}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
+});
+
+
+Route::get('/account-list', [UserController::class, 'account_list_view'])->middleware('role:Admin');
 Route::get('/account-request', [UserController::class, 'account_request_view'])->middleware('role:Admin');
 Route::post('/account-request/approval/{id}', [UserController::class, 'account_approval'])->middleware('role:Admin');
 

@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('rw');
             $table->string('kelurahan');
             $table->string('kode_pos');
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->string('lokasi')->nullable();
+            // $table->string('latitude')->nullable();
+            // $table->string('longitude')->nullable();
             $table->string('sertifikat_an');
             $table->string('foto_tampak_depan')->nullable();
             $table->decimal('luas_tanah', 10, 2);

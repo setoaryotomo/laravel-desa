@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Tambah Data Rumah Baru</h3>
-                    <a href="{{ route('rumah.index') }}" class="btn btn-sm btn-secondary float-right">Kembali</a>
+                    {{-- <a href="{{ route('rumah.index') }}" class="btn btn-sm btn-secondary float-right">Kembali</a> --}}
                 </div>
 
                 <div class="card-body">
@@ -33,6 +33,18 @@
                             </div>
 
                             <div class="col-md-6">
+                                <label for="sertifikat_an" class="form-label">Sertifikat Atas Nama</label>
+                                <input type="text" class="form-control @error('sertifikat_an') is-invalid @enderror" 
+                                       id="sertifikat_an" name="sertifikat_an" value="{{ old('sertifikat_an') }}" required>
+                                @error('sertifikat_an')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-2">
                                 <label for="no_rumah" class="form-label">Nomor Rumah</label>
                                 <input type="text" class="form-control @error('no_rumah') is-invalid @enderror" 
                                        id="no_rumah" name="no_rumah" value="{{ old('no_rumah') }}" required>
@@ -40,10 +52,8 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="rt" class="form-label">RT</label>
                                 <input type="text" class="form-control @error('rt') is-invalid @enderror" 
                                        id="rt" name="rt" value="{{ old('rt') }}" required>
@@ -52,7 +62,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label for="rw" class="form-label">RW</label>
                                 <input type="text" class="form-control @error('rw') is-invalid @enderror" 
                                        id="rw" name="rw" value="{{ old('rw') }}" required>
@@ -82,15 +92,6 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="sertifikat_an" class="form-label">Sertifikat Atas Nama</label>
-                                <input type="text" class="form-control @error('sertifikat_an') is-invalid @enderror" 
-                                       id="sertifikat_an" name="sertifikat_an" value="{{ old('sertifikat_an') }}" required>
-                                @error('sertifikat_an')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6">
                                 <label for="luas_tanah" class="form-label">Luas Tanah (m²)</label>
                                 <input type="number" step="0.01" class="form-control @error('luas_tanah') is-invalid @enderror" 
                                        id="luas_tanah" name="luas_tanah" value="{{ old('luas_tanah') }}" required>
@@ -98,9 +99,17 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="col-md-6">
+                                <label for="lokasi" class="form-label">Link Lokasi</label>
+                                <input type="text" step="0.01" class="form-control @error('lokasi') is-invalid @enderror" 
+                                       id="lokasi" name="lokasi" value="{{ old('lokasi') }}" required>
+                                @error('lokasi')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
-                        <div class="row mb-3">
+                        {{-- <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="latitude" class="form-label">Latitude (Opsional)</label>
                                 <input type="text" class="form-control @error('latitude') is-invalid @enderror" 
@@ -118,7 +127,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="mb-3">
                             <label for="foto_tampak_depan" class="form-label">Foto Tampak Depan Rumah</label>
@@ -131,7 +140,7 @@
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            {{-- <button type="reset" class="btn btn-secondary me-md-2">Reset</button> --}}
+                            <a href="{{ route('rumah.index') }}" ><button type="button" class="btn btn-secondary me-md-2 mr-1">Kembali</button></a>
                             <button type="submit" class="btn btn-primary">Simpan Data</button>
                         </div>
                     </form>

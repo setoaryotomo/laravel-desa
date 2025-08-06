@@ -15,13 +15,41 @@ form label{
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Edit Data Penghuni</h3>
-                    <a href="{{ route('rumah.penghuni.index', $rumah->id) }}" class="btn btn-sm btn-secondary float-right">Kembali</a>
+                    {{-- <a href="{{ route('rumah.penghuni.index', $rumah->id) }}" class="btn btn-sm btn-secondary float-right">Kembali</a> --}}
                 </div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('rumah.penghuni.update', [$rumah->id, $penghuni->id]) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="status_penghuni" class="form-label">Status Penghuni</label>
+                                <select class="form-control @error('status_penghuni') is-invalid @enderror" 
+                                        id="status_penghuni" name="status_penghuni" required>
+                                    <option value="">Pilih Status</option>
+                                    <option value="pemilik rumah" {{ old('status_penghuni', $penghuni->status_penghuni) == 'pemilik rumah' ? 'selected' : '' }}>Pemilik Rumah</option>
+                                    <option value="kontrak" {{ old('status_penghuni', $penghuni->status_penghuni) == 'kontrak' ? 'selected' : '' }}>Kontrak</option>
+                                    <option value="boro" {{ old('status_penghuni', $penghuni->status_penghuni) == 'boro' ? 'selected' : '' }}>Boro</option>
+                                </select>
+                                @error('status_penghuni')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="is_kepala_keluarga" class="form-label">Status dalam Keluarga</label>
+                                <select class="form-control @error('is_kepala_keluarga') is-invalid @enderror" 
+                                        id="is_kepala_keluarga" name="is_kepala_keluarga" required>
+                                    <option value="">Pilih Status</option>
+                                    <option value="1" {{ old('is_kepala_keluarga', $penghuni->is_kepala_keluarga) == '1' ? 'selected' : '' }}>Kepala Keluarga</option>
+                                    <option value="0" {{ old('is_kepala_keluarga', $penghuni->is_kepala_keluarga) == '0' ? 'selected' : '' }}>Anggota Keluarga</option>
+                                </select>
+                                @error('is_kepala_keluarga')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -118,6 +146,24 @@ form label{
                             </div>
 
                             <div class="col-md-6">
+                                <label for="status_martial" class="form-label">Status Perkawinan</label>
+                                <select class="form-control @error('status_martial') is-invalid @enderror" 
+                                        id="status_martial" name="status_martial" required>
+                                    <option value="">Pilih Status</option>
+                                    <option value="MENIKAH" {{ old('status_martial', $penghuni->status_martial) == 'MENIKAH' ? 'selected' : '' }}>Menikah</option>
+                                    <option value="JANDA/DUDA" {{ old('status_martial', $penghuni->status_martial) == 'JANDA/DUDA' ? 'selected' : '' }}>Janda/Duda</option>
+                                    <option value="BELUM MENIKAH" {{ old('status_martial', $penghuni->status_martial) == 'BELUM MENIKAH' ? 'selected' : '' }}>Belum Menikah</option>
+                                </select>
+                                @error('status_martial')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="pekerjaan" class="form-label">Pekerjaan</label>
                                 <select class="form-control @error('pekerjaan') is-invalid @enderror" 
                                         id="pekerjaan" name="pekerjaan" required>
@@ -134,9 +180,6 @@ form label{
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
-
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="tempat_kerja" class="form-label">Tempat Bekerja</label>
                                 <input type="text" class="form-control @error('tempat_kerja') is-invalid @enderror" 
@@ -146,51 +189,9 @@ form label{
                                 @enderror
                             </div>
 
-                            <div class="col-md-6">
-                                <label for="status_penghuni" class="form-label">Status Penghuni</label>
-                                <select class="form-control @error('status_penghuni') is-invalid @enderror" 
-                                        id="status_penghuni" name="status_penghuni" required>
-                                    <option value="">Pilih Status</option>
-                                    <option value="pemilik rumah" {{ old('status_penghuni', $penghuni->status_penghuni) == 'pemilik rumah' ? 'selected' : '' }}>Pemilik Rumah</option>
-                                    <option value="kontrak" {{ old('status_penghuni', $penghuni->status_penghuni) == 'kontrak' ? 'selected' : '' }}>Kontrak</option>
-                                    <option value="boro" {{ old('status_penghuni', $penghuni->status_penghuni) == 'boro' ? 'selected' : '' }}>Boro</option>
-                                </select>
-                                @error('status_penghuni')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="is_kepala_keluarga" class="form-label">Status dalam Keluarga</label>
-                                <select class="form-control @error('is_kepala_keluarga') is-invalid @enderror" 
-                                        id="is_kepala_keluarga" name="is_kepala_keluarga" required>
-                                    <option value="">Pilih Status</option>
-                                    <option value="1" {{ old('is_kepala_keluarga', $penghuni->is_kepala_keluarga) == '1' ? 'selected' : '' }}>Kepala Keluarga</option>
-                                    <option value="0" {{ old('is_kepala_keluarga', $penghuni->is_kepala_keluarga) == '0' ? 'selected' : '' }}>Anggota Keluarga</option>
-                                </select>
-                                @error('is_kepala_keluarga')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="status_martial" class="form-label">Status Perkawinan</label>
-                                <select class="form-control @error('status_martial') is-invalid @enderror" 
-                                        id="status_martial" name="status_martial" required>
-                                    <option value="">Pilih Status</option>
-                                    <option value="MENIKAH" {{ old('status_martial', $penghuni->status_martial) == 'MENIKAH' ? 'selected' : '' }}>Menikah</option>
-                                    <option value="JANDA/DUDA" {{ old('status_martial', $penghuni->status_martial) == 'JANDA/DUDA' ? 'selected' : '' }}>Janda/Duda</option>
-                                    <option value="BELUM MENIKAH" {{ old('status_martial', $penghuni->status_martial) == 'BELUM MENIKAH' ? 'selected' : '' }}>Belum Menikah</option>
-                                </select>
-                                @error('status_martial')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
                             
                         </div>
+
 
                         <div class="row mb-3">
                         <div class="col-md-6">
@@ -244,6 +245,7 @@ form label{
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ route('rumah.penghuni.index', $rumah->id) }}"><button type="button" class="btn btn-secondary mr-1">Kembali</button></a>
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         </div>
                     </form>

@@ -14,9 +14,13 @@ return new class extends Migration
         Schema::create('surat', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('nik');
             $table->string('jenis_surat');
             $table->string('keterangan');
-            $table->string('tanggal');
+            $table->string('telepon');
+            $table->string('email');
+            $table->string('lampiran');
+            $table->string('status');
             $table->timestamps();
         });
     }

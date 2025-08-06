@@ -5,9 +5,11 @@ use App\Http\Controllers\AnggotakeluargaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\JenissuratController;
 use App\Http\Controllers\PenghuniController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\RumahController;
+use App\Http\Controllers\SuratController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -95,6 +97,27 @@ Route::prefix('gallery')->middleware('role:Admin,User')->group(function () {
     Route::delete('/{gallery}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
 });
 
+Route::prefix('jenissurat')->middleware('role:Admin,User')->group(function () {
+    Route::get('/', [JenissuratController::class, 'index'])->name('jenissurat.index');
+    Route::get('/create', [JenissuratController::class, 'create'])->name('jenissurat.create');
+    Route::post('/', [JenissuratController::class, 'store'])->name('jenissurat.store');
+    Route::get('/{jenissurat}', [JenissuratController::class, 'show'])->name('jenissurat.show');
+    Route::get('/{jenissurat}/edit', [JenissuratController::class, 'edit'])->name('jenissurat.edit');
+    Route::put('/{jenissurat}', [JenissuratController::class, 'update'])->name('jenissurat.update');
+    Route::delete('/{jenissurat}', [JenissuratController::class, 'destroy'])->name('jenissurat.destroy');
+});
+
+Route::prefix('surat')->middleware('role:Admin,User')->group(function () {
+    Route::get('/', [SuratController::class, 'index'])->name('surat.index');
+    Route::get('/create', [SuratController::class, 'create'])->name('surat.create');
+    Route::post('/', [SuratController::class, 'store'])->name('surat.store');
+    Route::get('/{surat}', [SuratController::class, 'show'])->name('surat.show');
+    Route::get('/{surat}/edit', [SuratController::class, 'edit'])->name('surat.edit');
+    Route::put('/{surat}', [SuratController::class, 'update'])->name('surat.update');
+    Route::delete('/{surat}', [SuratController::class, 'destroy'])->name('surat.destroy');
+});
+
+Route::post('/permohonan', [SuratController::class, 'permohonan'])->name('permohonan');
 
 Route::get('/account-list', [UserController::class, 'account_list_view'])->middleware('role:Admin');
 Route::get('/account-request', [UserController::class, 'account_request_view'])->middleware('role:Admin');

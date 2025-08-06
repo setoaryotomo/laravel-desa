@@ -12,6 +12,16 @@
                 'icon' => 'fas fa-fw fa-home',
             ],
             (object) [
+                'title' => 'Permohonan Surat',
+                'path' => 'surat',
+                'icon' => 'fas fa-fw fa-book',
+            ],
+            (object) [
+                'title' => 'Jenis Surat',
+                'path' => 'jenissurat',
+                'icon' => 'fas fa-fw fa-book',
+            ],
+            (object) [
                 'title' => 'Berita',
                 'path' => 'berita',
                 'icon' => 'fas fa-fw fa-newspaper',

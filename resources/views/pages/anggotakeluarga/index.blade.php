@@ -3,12 +3,17 @@
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Data Anggota Keluarga</h1>
-    @isset($penghuni)
-    <a href="{{ route('penghuni.anggotakeluarga.create', ['rumah' => $rumah->id, 'penghuni' => $penghuni->id]) }}" 
-        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Anggota Keluarga
-     </a>
-    @endisset
+    <div>
+        @isset($penghuni)
+            <a href="{{ route('rumah.penghuni.index', $rumah->id) }}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali
+            </a>
+            <a href="{{ route('penghuni.anggotakeluarga.create', ['rumah' => $rumah->id, 'penghuni' => $penghuni->id]) }}" 
+                class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Anggota Keluarga
+            </a>
+        @endisset
+    </div>
 </div>
 
 <div class="row">

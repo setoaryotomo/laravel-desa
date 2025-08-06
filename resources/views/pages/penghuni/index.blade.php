@@ -24,10 +24,12 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
+                            <th>NIK</th>
                             <th>Jenis Kelamin</th>
-                            <th>Agama</th>
-                            <th>No HP</th>
-                            <th>Tgl Lahir</th>
+                            {{-- <th>Agama</th> --}}
+                            {{-- <th>No HP</th> --}}
+                            <th>Status Penghuni</th>
+                            {{-- <th>Tgl Lahir</th> --}}
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -36,10 +38,12 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $penghuni->nama }}</td>
+                            <td>{{ $penghuni->nik }}</td>
                             <td>{{ $penghuni->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                            <td>{{ $penghuni->agama }}</td>
-                            <td>{{ $penghuni->no_hp }}</td>
-                            <td>{{ \Carbon\Carbon::parse($penghuni->tgl_lahir)->format('d/m/Y') }}</td>
+                            {{-- <td>{{ $penghuni->agama }}</td> --}}
+                            {{-- <td>{{ $penghuni->no_hp }}</td> --}}
+                            <td>{{ ucwords($penghuni->status_penghuni) }} - {{ $penghuni->is_kepala_keluarga == '1' ? 'Kepala Keluarga' : 'Anggota Keluarga' }}</td>
+                            {{-- <td>{{ \Carbon\Carbon::parse($penghuni->tgl_lahir)->format('d/m/Y') }}</td> --}}
                             <td>
                                 <div class="d-flex">
                                     <a href="{{ route('penghuni.anggotakeluarga.index', ['rumah' => $penghuni->rumah_id, 'penghuni' => $penghuni->id]) }}" class="d-inline-block mr-2 btn btn-sm btn-info">

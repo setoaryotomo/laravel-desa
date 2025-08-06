@@ -40,6 +40,7 @@ class AnggotakeluargaController extends Controller
 
     $validated = $request->validate([
         'nama' => 'required|string|max:100',
+        'nik' => 'required|string|max:100',
         'jenis_kelamin' => 'required|in:L,P',
         'agama' => 'required|string|max:20',
         'no_hp' => 'required|string|max:15',
@@ -81,6 +82,7 @@ class AnggotakeluargaController extends Controller
         $penghuni = Penghuni::where('rumah_id', $rumahId)->findOrFail($penghuniId);
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
+            'nik' => 'required|string|max:100',
             'jenis_kelamin' => 'required|in:L,P',
             'agama' => 'required|string|max:20',
             'no_hp' => 'required|string|max:15',

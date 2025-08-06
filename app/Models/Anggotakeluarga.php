@@ -14,4 +14,9 @@ class Anggotakeluarga extends Model
     {
         return $this->hasOne(Penghuni::class, "id","penghuni_id");
     }
+
+    public function penghuni()
+    {
+        return $this->belongsTo(Penghuni::class, 'penghuni_id');
+    }
 }

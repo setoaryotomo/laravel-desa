@@ -25,9 +25,11 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
+                            <th>NIK</th>
                             <th>Jenis Kelamin</th>
-                            <th>Agama</th>
-                            <th>No HP</th>
+                            <th>Status Anggota Keluarga</th>
+                            {{-- <th>Agama</th> --}}
+                            {{-- <th>No HP</th> --}}
                             <th>Tgl Lahir</th>
                             <th>Aksi</th>
                         </tr>
@@ -37,9 +39,11 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $anggotakeluarga->nama }}</td>
+                            <td>{{ $anggotakeluarga->nik }}</td>
                             <td>{{ $anggotakeluarga->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                            <td>{{ $anggotakeluarga->agama }}</td>
-                            <td>{{ $anggotakeluarga->no_hp }}</td>
+                            <td>{{ ucwords($anggotakeluarga->status_keluarga) }}</td>
+                            {{-- <td>{{ $anggotakeluarga->agama }}</td> --}}
+                            {{-- <td>{{ $anggotakeluarga->no_hp }}</td> --}}
                             <td>{{ \Carbon\Carbon::parse($anggotakeluarga->tgl_lahir)->format('d/m/Y') }}</td>
                             <td>
                                 <div class="d-flex">

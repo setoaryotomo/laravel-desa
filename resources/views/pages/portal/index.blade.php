@@ -1,6 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<style>
+    /* Search Section */
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.search-box select {
+    width: 120px;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.search-results {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.result-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.result-item:hover {
+    background-color: #f8f9fa;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.result-detail {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.no-results {
+    padding: 20px;
+    text-align: center;
+    color: #7f8c8d;
+}
+
+.loading-indicator {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-indicator.active {
+    display: block;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -382,22 +471,54 @@
 
     <footer id="footer" class="footer">
 
-        <div class="footer-newsletter">
+    <!-- Pencarian Real-time Section -->
+    <section id="search" class="search section light-background">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Pencarian Data Penghuni</h2>
+                <p>Cari data penghuni berdasarkan NIK, Nama</p>
+            </div>
+
+            <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-lg-8">
+                    <div class="search-box">
+                        <input type="text" id="search-input" class="form-control" placeholder="Masukkan NIK/Nama.">
+                        <select id="search-by" class="form-select">
+                            <option value="nik">NIK</option>
+                            <option value="nama">Nama</option>
+                            {{-- <option value="no_kk">No KK</option> --}}
+                        </select>
+                        <button style="display: none" id="search-btn" class="btn btn-primary">Cari</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-12">
+                    <div id="search-results" class="search-results">
+                        <!-- Hasil pencarian akan muncul di sini -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        {{-- <div class="footer-newsletter">
             <div class="container">
                 <div class="row justify-content-center text-center">
                     <div class="col-lg-6">
                         <h4>Join Our Newsletter</h4>
                         <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-                        {{-- <form action="forms/newsletter.php" method="post" class="php-email-form">
+                        <form action="forms/newsletter.php" method="post" class="php-email-form">
               <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
               <div class="loading">Loading</div>
               <div class="error-message"></div>
               <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-            </form> --}}
+            </form>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="container footer-top">
             <div class="row gy-4">
@@ -480,7 +601,104 @@
 
     <!-- Main JS File -->
     <script src="{{ asset('enno/assets/js/main.js') }}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const searchBySelect = document.getElementById('search-by');
+            const searchBtn = document.getElementById('search-btn');
+            const searchResults = document.getElementById('search-results');
+        
+            // Fungsi untuk melakukan pencarian
+            function performSearch() {
+    const keyword = searchInput.value.trim();
+    const searchBy = searchBySelect.value;
+
+    if (keyword.length === 0) {
+        searchResults.innerHTML = '<div class="no-results">Masukkan kata kunci pencarian</div>';
+        return;
+    }
+
+    // Tampilkan loading
+    searchResults.innerHTML = `
+        <div class="loading-indicator active">
+            <div class="spinner"></div>
+            <p>Mencari data...</p>
+        </div>
+    `;
+
+    fetch(`/api/search?keyword=${encodeURIComponent(keyword)}&search_by=${searchBy}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                searchResults.innerHTML = '<div class="no-results">Tidak ditemukan data yang sesuai</div>';
+                return;
+            }
+
+            let html = '';
+            data.forEach(item => {
+                if (item.type === 'penghuni') {
+                    html += `
+                        <div class="result-item penghuni">
+                            <div class="result-title">
+                                ${item.nama} 
+                                <span class="badge bg-primary">Kepala Keluarga</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>NIK: <b>${item.nik}</b></span>
+                                <span>Status: <b>${item.status_penghuni}</b></span>
+                                <span>Alamat: <b>${item.rumah.alamat_lengkap} RT ${item.rumah.rt} RW ${item.rumah.rw} Kelurahan ${item.rumah.kelurahan}</b></span>
+                                <span>Kodepos: <b>${item.rumah.kode_pos}</b></span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="result-item anggota">
+                            <div class="result-title">
+                                ${item.nama} 
+                                <span class="badge bg-success">Anggota Keluarga</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>NIK: <b>${item.nik}</b></span>
+                                <span>Status: <b>${item.status_keluarga}</b></span>
+                                <span>Kepala Keluarga: <b>${item.penghuni?.nama_kepala_keluarga || '-'}</b></span>
+                                <span>Alamat: <b>${item.penghuni.rumah.alamat_lengkap} RT ${item.penghuni.rumah.rt} RW ${item.penghuni.rumah.rw} Kelurahan ${item.penghuni.rumah.kelurahan}</b></span>
+                                <span>Kodepos: <b>${item.penghuni.rumah.kode_pos}</b></span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            searchResults.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            searchResults.innerHTML = '<div class="no-results">Terjadi kesalahan saat melakukan pencarian</div>';
+        });
+}
+        
+            // Event listener untuk tombol cari
+            searchBtn.addEventListener('click', performSearch);
+        
+            // Event listener untuk enter di input
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        
+            // Event listener untuk perubahan input (pencarian langsung saat mengetik)
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(performSearch, 500);
+            });
+        });
+        </script>
 
 </body>
 
 </html>
+

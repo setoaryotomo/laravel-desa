@@ -40,19 +40,19 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-3">
-                                <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                                <select class="form-control @error('jenis_kelamin') is-invalid @enderror" 
-                                        id="jenis_kelamin" name="jenis_kelamin" required>
-                                    <option value="">Pilih Jenis Kelamin</option>
-                                    <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                                    <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
-                                </select>
-                                @error('jenis_kelamin')
+                            <div class="col-md-6">
+                                <label for="nik" class="form-label">NIK</label>
+                                <input type="text" class="form-control @error('nik') is-invalid @enderror" 
+                                       id="nik" name="nik" value="{{ old('nik') }}" required>
+                                @error('nik')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
+                            
+                        </div>
+
+                        <div class="row mb-3">
                             <div class="col-md-3">
                                 <label for="status_keluarga" class="form-label">Status Keluarga</label>
                                 <select class="form-control @error('status_keluarga') is-invalid @enderror" 
@@ -66,10 +66,19 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                                <select class="form-control @error('jenis_kelamin') is-invalid @enderror" 
+                                        id="jenis_kelamin" name="jenis_kelamin" required>
+                                    <option value="">Pilih Jenis Kelamin</option>
+                                    <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                    <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                </select>
+                                @error('jenis_kelamin')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3">
                                 <label for="tgl_lahir" class="form-label">Tanggal Lahir</label>
                                 <input type="date" class="form-control @error('tgl_lahir') is-invalid @enderror" 
                                        id="tgl_lahir" name="tgl_lahir" value="{{ old('tgl_lahir') }}" required>
@@ -78,7 +87,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <label for="agama" class="form-label">Agama</label>
                                 <select class="form-control @error('agama') is-invalid @enderror" 
                                         id="agama" name="agama" required>

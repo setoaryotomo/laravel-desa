@@ -16,6 +16,7 @@ return new class extends Migration
             // $table->string('kartu_keluarga');
             $table->bigInteger('penghuni_id')->unsigned();
             $table->string('nama');
+            $table->string('nik');
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->string('agama');
             $table->string('no_hp')->nullable();

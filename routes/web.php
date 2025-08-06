@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [PortalController::class, 'homepage']);
+Route::get('/api/search', [PortalController::class, 'apiSearch'])->name('api.search');
 
 // Auth
 // Route::get('/', [AuthController::class, 'login']);

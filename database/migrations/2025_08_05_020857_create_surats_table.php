@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('keterangan');
             $table->string('telepon');
             $table->string('email');
-            $table->string('lampiran');
+            $table->string('lampiran')->nullable();
             $table->string('status');
             $table->timestamps();
         });

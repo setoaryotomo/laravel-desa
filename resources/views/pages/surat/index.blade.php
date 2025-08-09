@@ -1,16 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- <div class="container"> --}}
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Data surat</h1>
-        <a href="/surat/create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-plus fa-sm text-white-50"></i> Tambah surat</a>
+
+<style>
+    .alert {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+        width: auto;
+        max-width: 350px;
+        padding: 15px;
+        border-radius: 5px;
+        transition: opacity 0.5s ease;
+    }
+</style>
+
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fa fa-check-circle" aria-hidden="true"></i>
+        {{ session('success') }}
+        {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">x</button> --}}
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-body">
+@endif
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Data surat</h1>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card shadow">
+            <div class="card-body">
                 <table class="table table-bordered table-hovered">
                     <thead>
                         <tr>
@@ -19,11 +40,7 @@
                             <th>Nik</th>
                             <th>Jenis Surat</th>
                             <th>keterangan</th>
-                            {{-- <th>telepon</th> --}}
-                            {{-- <th>email</th> --}}
-                            {{-- <th>lampiran</th> --}}
                             <th>status</th>
-                            {{-- <th>Nama</th> --}}
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -35,23 +52,31 @@
                             <td>{{ $surat->nik }}</td>
                             <td>{{ $surat->jenis_surat }}</td>
                             <td>{{ $surat->keterangan }}</td>
-                            {{-- <td>{{ $surat->telepon }}</td> --}}
-                            {{-- <td>{{ $surat->email }}</td> --}}
-                            {{-- <td>{{ $surat->lampiran }}</td> --}}
-                            <td>{{ $surat->status }}</td>
+                            <td>
+                                @if($surat->status == 1)
+                                    <span class="badge badge-warning">Dalam Proses</span>
+                                @elseif($surat->status == 2)
+                                    <span class="badge badge-primary">Disetujui</span>
+                                @elseif($surat->status == 3)
+                                    <span class="badge badge-success">Terkirim</span>
+                                @endif
+                            </td>
                             <td>
                                 <div class="d-flex">
-                                    <a href="{{ route('surat.edit', $surat->id) }}" class="d-inline-block mr-2 btn btn-sm btn-warning">
-                                        <i class="fas fa-pen"></i> Edit
+                                    <a href="{{ route('surat.edit', $surat->id) }}" class="d-inline-block mr-2 btn btn-sm btn-primary">
+                                        <i class="fas fa-eye"></i> View
                                     </a>
-                                    {{-- <a href="{{ route('surat.delete', $surat->id) }}" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-eraser"></i>
-                                    </a> --}}
-                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationDelete-{{ $surat->id }}">
+                                    
+                                    @if($surat->status == 2)
+                                        <a href="{{ route('surat.mail', $surat->id) }}" class="d-inline-block mr-2 btn btn-sm btn-success">
+                                            <i class="fas fa-paper-plane"></i> Send
+                                        </a>
+                                    @endif
+
+                                    {{-- <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationDelete-{{ $surat->id }}">
                                         <i class="fas fa-eraser"></i> Delete
-                                    </button>
+                                    </button> --}}
                                 </div>
-                                {{-- <a href="{{ route('surat.edit', $surat->id) }}" class="btn btn-info btn-sm">Detail</a> --}}
                             </td>
                         </tr>
                             @include('pages.surat.confirmation-delete')
@@ -59,9 +84,19 @@
                     </tbody>
                 </table>
             </div>
-            </div>
         </div>
     </div>
-    
-{{-- </div> --}}
+</div>
+
+<script>
+    // Otomatis hilangkan alert setelah beberapa detik
+    setTimeout(function () {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+            alert.classList.remove('show');
+            alert.classList.add('fade');
+        }
+    }, 3000); // 5 detik
+</script>
+
 @endsection

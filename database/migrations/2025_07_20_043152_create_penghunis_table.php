@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('no_wa')->nullable();
             $table->timestamps();
 
-            $table->foreign('rumah_id')->references('id')->on('rumah');
+            $table->foreign('rumah_id')->references('id')->on('rumah')->onDelete('cascade');
         });
     }
 

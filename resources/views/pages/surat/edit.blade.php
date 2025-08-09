@@ -1,4 +1,4 @@
-<!-- resources/views/gallery/edit.blade.php -->
+<!-- resources/views/surat/edit.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -14,21 +14,63 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Edit Data gallery</h3>
-                    <a href="{{ route('gallery.index') }}" class="btn btn-sm btn-secondary float-right">Kembali</a>
+                    <h3 class="card-title">Edit Data surat</h3>
+                    <a href="{{ route('surat.index') }}" class="btn btn-sm btn-secondary float-right">Kembali</a>
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('gallery.update', $gallery->id) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('surat.update', $surat->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
                         <div class="row mb-3">
                             <div class="col-md-6">
+                                <label for="nama" class="form-label">Nama</label>
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" 
+                                       id="nama" name="nama" 
+                                       value="{{ old('nama', $surat->nama) }}" required readonly>
+                                @error('nama')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nik" class="form-label">nik</label>
+                                <input type="text" class="form-control @error('nik') is-invalid @enderror" 
+                                       id="nik" name="nik" 
+                                       value="{{ old('nik', $surat->nik) }}" required readonly>
+                                @error('nik')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="telepon" class="form-label">telepon</label>
+                                <input type="text" class="form-control @error('telepon') is-invalid @enderror" 
+                                       id="telepon" name="telepon" 
+                                       value="{{ old('telepon', $surat->telepon) }}" required readonly>
+                                @error('telepon')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">email</label>
+                                <input type="text" class="form-control @error('email') is-invalid @enderror" 
+                                       id="email" name="email" 
+                                       value="{{ old('email', $surat->email) }}" required readonly>
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="jenis_surat" class="form-label">Jenis Surat</label>
                                 <input type="text" class="form-control @error('jenis_surat') is-invalid @enderror" 
                                        id="jenis_surat" name="jenis_surat" 
-                                       value="{{ old('jenis_surat', $gallery->jenis_surat) }}" required>
+                                       value="{{ old('jenis_surat', $surat->jenis_surat) }}" required readonly>
                                 @error('jenis_surat')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -37,7 +79,7 @@
                                 <label for="keterangan" class="form-label">Keterangan</label>
                                 <input type="text" class="form-control @error('keterangan') is-invalid @enderror" 
                                        id="keterangan" name="keterangan" 
-                                       value="{{ old('keterangan', $gallery->keterangan) }}" required>
+                                       value="{{ old('keterangan', $surat->keterangan) }}" required readonly>
                                 @error('keterangan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -45,20 +87,48 @@
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="template" class="form-label">Template</label>
-                                <textarea class="form-control @error('template') is-invalid @enderror"
-                                    id="template" name="template" required>{{ old('template', $gallery->template) }}</textarea>
-                                @error('template')
+                            <div class="col-md-6">
+                                @if ($surat->status == 3)
+                                <label for="lampiran" class="form-label">File Surat</label>    
+                                @else
+                                <label for="lampiran" class="form-label">Upload File Surat</label>
+                                @endif
+
+                                @if($surat->lampiran)
+                                    <div class="mb-2">
+                                        @if(pathinfo($surat->lampiran, PATHINFO_EXTENSION) === 'pdf')
+                                            <a href="{{ asset('storage/' . $surat->lampiran) }}" target="_blank" class="btn btn-sm btn-info">Lihat file_surat (PDF)</a>
+                                        @else
+                                            <img src="{{ asset('storage/' . $surat->lampiran) }}" 
+                                                 class="img-thumbnail" style="width: 300px;">
+                                        @endif
+                                        <div style="display: none" class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   id="hapus_file_surat" name="hapus_file_surat">
+                                            <label class="form-check-label" for="hapus_file_surat">
+                                                Hapus file saat disimpan
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if ($surat->status == 2 || $surat->status == 1)
+                                <input type="file" class="form-control @error('lampiran') is-invalid @enderror" 
+                                       id="lampiran" name="lampiran" accept=".pdf,.jpg,.jpeg,.png">
+                                <small class="text-muted">Format: PDF, JPG, PNG, Maksimal 2MB</small>
+                                @error('lampiran')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                @endif
                             </div>
                         </div>
 
+                        @if ($surat->status == 2 || $surat->status == 1)
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             {{-- <button type="reset" class="btn btn-secondary me-md-2">Reset Perubahan</button> --}}
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         </div>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -68,25 +138,34 @@
 
 <!-- Script untuk menampilkan preview gambar baru -->
 <script>
-    document.getElementById('foto_gallery').addEventListener('change', function(event) {
+    // Script untuk menampilkan preview file_surat jika berupa gambar
+    document.getElementById('lampiran').addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Hapus preview lama jika ada
-                const oldPreview = document.getElementById('current-image-preview');
-                if (oldPreview) oldPreview.style.display = 'none';
+                // Hide current file_surat preview if exists
+                const currentPreview = document.getElementById('current-file_surat-preview');
+                if (currentPreview) currentPreview.style.display = 'none';
                 
-                // Buat atau update preview baru
-                let preview = document.getElementById('new-image-preview');
+                let preview = document.getElementById('new-file_surat-preview');
                 if (!preview) {
                     preview = document.createElement('div');
-                    preview.id = 'new-image-preview';
+                    preview.id = 'new-file_surat-preview';
                     preview.className = 'mt-3';
-                    preview.innerHTML = '<h6>Preview Gambar Baru:</h6><img src="" class="img-thumbnail" style="max-width: 300px;">';
+                    
+                    // if (file.type.match('image.*')) {
+                    //     preview.innerHTML = '<h6>Preview file_surat Baru:</h6><img src="" class="img-thumbnail" style="max-width: 300px;">';
+                    // } else {
+                    //     preview.innerHTML = '<h6>File file_surat Baru:</h6><p>' + file.name + '</p>';
+                    // }
+                    
                     event.target.parentNode.appendChild(preview);
                 }
-                preview.querySelector('img').src = e.target.result;
+                
+                if (file.type.match('image.*')) {
+                    preview.querySelector('img').src = e.target.result;
+                }
             }
             reader.readAsDataURL(file);
         }

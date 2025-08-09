@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+
 Route::get('/', [PortalController::class, 'homepage']);
 Route::get('/api/search', [PortalController::class, 'apiSearch'])->name('api.search');
 
@@ -113,6 +114,7 @@ Route::prefix('surat')->middleware('role:Admin,User')->group(function () {
     Route::get('/create', [SuratController::class, 'create'])->name('surat.create');
     Route::post('/', [SuratController::class, 'store'])->name('surat.store');
     Route::get('/{surat}', [SuratController::class, 'show'])->name('surat.show');
+    Route::get('/{surat}/email', [SuratController::class, 'mail'])->name('surat.mail');
     Route::get('/{surat}/edit', [SuratController::class, 'edit'])->name('surat.edit');
     Route::put('/{surat}', [SuratController::class, 'update'])->name('surat.update');
     Route::delete('/{surat}', [SuratController::class, 'destroy'])->name('surat.destroy');

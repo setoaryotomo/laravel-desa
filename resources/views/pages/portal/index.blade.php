@@ -437,11 +437,11 @@
                                         id="inputKeterangan" required="">
                                 </div>
 
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <label for="subject-field" class="pb-2">Lampiran</label>
                                     <input type="text" class="form-control" name="lampiran" id="inputLampiran"
                                         required="">
-                                </div>
+                                </div> --}}
 
                                 {{-- <input type="hidden" name="_method" value="POST"> --}}
 

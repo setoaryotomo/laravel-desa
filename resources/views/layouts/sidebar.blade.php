@@ -16,11 +16,11 @@
                 'path' => 'surat',
                 'icon' => 'fas fa-fw fa-book',
             ],
-            (object) [
-                'title' => 'Jenis Surat',
-                'path' => 'jenissurat',
-                'icon' => 'fas fa-fw fa-book',
-            ],
+            // (object) [
+            //     'title' => 'Jenis Surat',
+            //     'path' => 'jenissurat',
+            //     'icon' => 'fas fa-fw fa-book',
+            // ],
             (object) [
                 'title' => 'Berita',
                 'path' => 'berita',
@@ -64,8 +64,9 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/dashboard">
+        {{-- <div class="sidebar-brand-icon rotate-n-15"> --}}
+        <div class="sidebar-brand-icon">
             <i class="fas fa-laugh-wink"></i>
         </div>
         <div class="sidebar-brand-text mx-3">Desa <sup></sup></div>

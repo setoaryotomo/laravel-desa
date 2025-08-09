@@ -17,19 +17,25 @@ class AgendaController extends Controller
     {
         return view('pages.agenda.create');
     }
+
     public function edit($id)
     {
         $agenda = Agenda::findOrFail($id);
-
         return view('pages.agenda.edit', compact('agenda'));
     }
+
     public function destroy($id)
     {
-        $agendas = Agenda::findOrFail($id);
-        $agendas->delete();
-        return redirect('/agenda')->with('success','berhasil hapus');
+        $agenda = Agenda::findOrFail($id);
+        
+        // Delete the associated file if it exists
+        if ($agenda->foto_agenda && file_exists(public_path('storage/agenda/' . basename($agenda->foto_agenda)))) {
+            unlink(public_path('storage/agenda/' . basename($agenda->foto_agenda)));
+        }
+        
+        $agenda->delete();
+        return redirect('/agenda')->with('success', 'Berhasil menghapus data agenda');
     }
-
 
     public function store(Request $request)
     {
@@ -40,17 +46,24 @@ class AgendaController extends Controller
             'foto_agenda' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        // Handle file upload
         if ($request->hasFile('foto_agenda')) {
-            $validated['foto_agenda'] = $request->file('foto_agenda')->store('agenda', 'public');
+            $file = $request->file('foto_agenda');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            
+            // Simpan file langsung ke public/storage/agenda
+            $file->move(public_path('storage/agenda'), $filename);
+            $validated['foto_agenda'] = 'agenda/' . $filename;
         }
 
         Agenda::create($validated);
-
         return redirect()->route('agenda.index')->with('success', 'Data agenda berhasil ditambahkan');
     }
     
     public function update(Request $request, $id)
     {
+        $agenda = Agenda::findOrFail($id);
+        
         $validated = $request->validate([
             'judul' => 'required',
             'deskripsi' => 'required',
@@ -59,11 +72,21 @@ class AgendaController extends Controller
         ]);
 
         if ($request->hasFile('foto_agenda')) {
-            $validated['foto_agenda'] = $request->file('foto_agenda')->store('agenda', 'public');
+            // Delete old file if it exists
+            if ($agenda->foto_agenda && file_exists(public_path($agenda->foto_agenda))) {
+                unlink(public_path($agenda->foto_agenda));
+            }
+            
+            // Store new file
+            $file = $request->file('foto_agenda');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            
+            // Simpan file langsung ke public/storage/agenda
+            $file->move(public_path('storage/agenda'), $filename);
+            $validated['foto_agenda'] = 'agenda/' . $filename;
         }
 
-        // Agenda::findOrFail($id)->update($request->validated());
-        Agenda::findOrFail($id)->update($validated);
+        $agenda->update($validated);
 
         return redirect()->route('agenda.index')->with('success', 'Data agenda berhasil diubah');
     }

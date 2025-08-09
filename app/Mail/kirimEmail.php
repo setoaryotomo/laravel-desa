@@ -7,7 +7,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class kirimEmail extends Mailable
 {
@@ -50,19 +52,50 @@ class kirimEmail extends Mailable
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
     public function attachments(): array
     {
-        if ($this->attachmentPath) {
-            return [
-                \Illuminate\Mail\Mailables\Attachment::fromPath($this->attachmentPath)
-                    ->as('surat.pdf')
-                    ->withMime('application/pdf'),
-            ];
+        $attachments = [];
+        
+        if ($this->attachmentPath && file_exists($this->attachmentPath)) {
+            try {
+                // Deteksi MIME type berdasarkan ekstensi file
+                $extension = pathinfo($this->attachmentPath, PATHINFO_EXTENSION);
+                $mimeType = $this->getMimeType($extension);
+                
+                // Buat nama file untuk attachment
+                $originalName = $this->surat->jenis_surat . '_' . $this->surat->nama . '.' . $extension;
+                
+                $attachments[] = Attachment::fromPath($this->attachmentPath)
+                    ->as($originalName)
+                    ->withMime($mimeType);
+                    
+                Log::info('Attachment berhasil ditambahkan: ' . $this->attachmentPath);
+                
+            } catch (\Exception $e) {
+                Log::error('Gagal menambahkan attachment: ' . $e->getMessage());
+            }
+        } else {
+            Log::warning('File attachment tidak ditemukan atau tidak valid: ' . ($this->attachmentPath ?? 'null'));
         }
         
-        return [];
+        return $attachments;
+    }
+    
+    /**
+     * Get MIME type based on file extension
+     */
+    private function getMimeType($extension)
+    {
+        $mimeTypes = [
+            'pdf' => 'application/pdf',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ];
+        
+        return $mimeTypes[strtolower($extension)] ?? 'application/octet-stream';
     }
 }

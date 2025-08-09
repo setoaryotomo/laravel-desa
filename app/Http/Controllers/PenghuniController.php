@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rumah;
 use App\Models\Penghuni;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class PenghuniController extends Controller
 {
@@ -45,11 +45,17 @@ class PenghuniController extends Controller
 
         // Handle file uploads
         if ($request->hasFile('file_ktp')) {
-            $validated['file_ktp'] = $request->file('file_ktp')->store('penghuni/ktp', 'public');
+            $file = $request->file('file_ktp');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/penghuni/ktp'), $filename);
+            $validated['file_ktp'] = 'penghuni/ktp/' . $filename;
         }
         
         if ($request->hasFile('kartu_keluarga')) {
-            $validated['kartu_keluarga'] = $request->file('kartu_keluarga')->store('penghuni/kk', 'public');
+            $file = $request->file('kartu_keluarga');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/penghuni/kk'), $filename);
+            $validated['kartu_keluarga'] = 'penghuni/kk/' . $filename;
         }
 
         // Tambahkan rumah_id ke data yang divalidasi
@@ -103,11 +109,11 @@ class PenghuniController extends Controller
     public function destroy(Rumah $rumah, Penghuni $penghuni)
     {
         // Hapus file terkait
-        if ($penghuni->file_ktp) {
-            Storage::disk('public')->delete($penghuni->file_ktp);
+        if ($penghuni->file_ktp && file_exists(public_path($penghuni->file_ktp))) {
+            File::delete(public_path($penghuni->file_ktp));
         }
-        if ($penghuni->kartu_keluarga) {
-            Storage::disk('public')->delete($penghuni->kartu_keluarga);
+        if ($penghuni->kartu_keluarga && file_exists(public_path($penghuni->kartu_keluarga))) {
+            File::delete(public_path($penghuni->kartu_keluarga));
         }
 
         $penghuni->delete();
@@ -123,22 +129,42 @@ class PenghuniController extends Controller
     {
         // Handle KTP
         if ($request->has('hapus_ktp') && $request->hapus_ktp) {
-            Storage::disk('public')->delete($penghuni->file_ktp);
+            if ($penghuni->file_ktp && file_exists(public_path($penghuni->file_ktp))) {
+                File::delete(public_path($penghuni->file_ktp));
+            }
             $validated['file_ktp'] = null;
         } elseif ($request->hasFile('file_ktp')) {
-            Storage::disk('public')->delete($penghuni->file_ktp);
-            $validated['file_ktp'] = $request->file('file_ktp')->store('penghuni/ktp', 'public');
+            // Hapus file lama jika ada
+            if ($penghuni->file_ktp && file_exists(public_path($penghuni->file_ktp))) {
+                File::delete(public_path($penghuni->file_ktp));
+            }
+            
+            // Simpan file baru
+            $file = $request->file('file_ktp');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/penghuni/ktp'), $filename);
+            $validated['file_ktp'] = 'penghuni/ktp/' . $filename;
         } else {
             $validated['file_ktp'] = $penghuni->file_ktp;
         }
 
         // Handle Kartu Keluarga
         if ($request->has('hapus_kk') && $request->hapus_kk) {
-            Storage::disk('public')->delete($penghuni->kartu_keluarga);
+            if ($penghuni->kartu_keluarga && file_exists(public_path($penghuni->kartu_keluarga))) {
+                File::delete(public_path($penghuni->kartu_keluarga));
+            }
             $validated['kartu_keluarga'] = null;
         } elseif ($request->hasFile('kartu_keluarga')) {
-            Storage::disk('public')->delete($penghuni->kartu_keluarga);
-            $validated['kartu_keluarga'] = $request->file('kartu_keluarga')->store('penghuni/kk', 'public');
+            // Hapus file lama jika ada
+            if ($penghuni->kartu_keluarga && file_exists(public_path($penghuni->kartu_keluarga))) {
+                File::delete(public_path($penghuni->kartu_keluarga));
+            }
+            
+            // Simpan file baru
+            $file = $request->file('kartu_keluarga');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/penghuni/kk'), $filename);
+            $validated['kartu_keluarga'] = 'penghuni/kk/' . $filename;
         } else {
             $validated['kartu_keluarga'] = $penghuni->kartu_keluarga;
         }

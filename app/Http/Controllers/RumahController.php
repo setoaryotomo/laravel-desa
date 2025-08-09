@@ -48,9 +48,19 @@ class RumahController extends Controller
             'foto_tampak_depan' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        // Handle file upload
         if ($request->hasFile('foto_tampak_depan')) {
-            $validated['foto_tampak_depan'] = $request->file('foto_tampak_depan')->store('rumah', 'public');
+            $file = $request->file('foto_tampak_depan');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            
+            // Simpan file langsung ke public/storage/rumah
+            $file->move(public_path('storage/rumah'), $filename);
+            $validated['foto_tampak_depan'] = 'rumah/' . $filename;
         }
+        
+        // if ($request->hasFile('foto_tampak_depan')) {
+        //     $validated['foto_tampak_depan'] = $request->file('foto_tampak_depan')->store('rumah', 'public');
+        // }
 
         Rumah::create($validated);
 
@@ -59,6 +69,8 @@ class RumahController extends Controller
     
     public function update(Request $request, $id)
     {
+        $rumah = Rumah::findOrFail($id);
+
         $validated = $request->validate([
             'alamat_lengkap' => 'required',
             'no_rumah' => 'required',
@@ -75,11 +87,28 @@ class RumahController extends Controller
         ]);
 
         if ($request->hasFile('foto_tampak_depan')) {
-            $validated['foto_tampak_depan'] = $request->file('foto_tampak_depan')->store('rumah', 'public');
+            // Delete old file if it exists
+            if ($rumah->foto_tampak_depan && file_exists(public_path($rumah->foto_tampak_depan))) {
+                unlink(public_path($rumah->foto_tampak_depan));
+            }
+            
+            // Store new file
+            $file = $request->file('foto_tampak_depan');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            
+            // Simpan file langsung ke public/storage/rumah
+            $file->move(public_path('storage/rumah'), $filename);
+            $validated['foto_tampak_depan'] = 'rumah/' . $filename;
         }
 
+        // if ($request->hasFile('foto_tampak_depan')) {
+        //     $validated['foto_tampak_depan'] = $request->file('foto_tampak_depan')->store('rumah', 'public');
+        // }
+
         // Rumah::findOrFail($id)->update($request->validated());
-        Rumah::findOrFail($id)->update($validated);
+        // Rumah::findOrFail($id)->update($validated);
+
+        $rumah->update($validated);
 
         return redirect()->route('rumah.index')->with('success', 'Data rumah berhasil diubah');
     }

@@ -6,16 +6,16 @@ use App\Mail\kirimEmail;
 use App\Models\Surat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class SuratController extends Controller
 {
     public function index()
     {
-        // $surats = Surat::all();
         $surats = Surat::orderBy('created_at', 'desc')->get();
         return view('pages.surat.index', compact('surats'));
     }
-
 
     public function permohonan(Request $request)
     {
@@ -25,8 +25,7 @@ class SuratController extends Controller
             'jenis_surat' => ['required'],
             'keterangan' => ['required'],
             'telepon' => ['required'],
-            'email' => ['required'],
-            // 'lampiran' => ['required'],
+            'email' => ['required', 'email'], // Tambahkan validasi email
         ]);
 
         $surat = new Surat();
@@ -36,18 +35,15 @@ class SuratController extends Controller
         $surat->keterangan = $request->input('keterangan');
         $surat->telepon = $request->input('telepon');
         $surat->email = $request->input('email');
-        // $surat->lampiran = $request->input('lampiran');
         $surat->status = 1;
         $surat->saveOrFail();
 
-        // return redirect('/')->with('success','Berhasil, tunggu persetujuan');
         return back()->with('success', 'Permohonan berhasil dikirim!');
     }
 
     public function edit($id)
     {
         $surat = Surat::findOrFail($id);
-
         return view('pages.surat.edit', compact('surat'));
     }
 
@@ -59,63 +55,88 @@ class SuratController extends Controller
             'jenis_surat' => 'required',
             'keterangan' => 'required',
             'telepon' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
             'tanggal' => 'nullable',
             'lampiran' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
         $validated['status'] = 2;
 
+        $surat = Surat::findOrFail($id);
+
+        // Handle file upload dengan public_path
         if ($request->hasFile('lampiran')) {
-            $validated['lampiran'] = $request->file('lampiran')->store('surat', 'public');
+            // Delete old file if exists
+            if ($surat->lampiran && file_exists(public_path('storage/' . $surat->lampiran))) {
+                File::delete(public_path('storage/' . $surat->lampiran));
+            }
+
+            // Create directory if not exists
+            if (!file_exists(public_path('storage/surat'))) {
+                File::makeDirectory(public_path('storage/surat'), 0755, true);
+            }
+
+            // Store new file
+            $file = $request->file('lampiran');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/surat'), $filename);
+            $validated['lampiran'] = 'surat/' . $filename;
         }
 
-        Surat::findOrFail($id)->update($validated);
+        $surat->update($validated);
 
         return redirect()->route('surat.index')->with('success', 'Surat berhasil dibuat');
     }
 
-    // public function mail($id)
-    // {
-    //     $surat = Surat::findOrFail($id);
-
-    //     // Pastikan lampiran ada
-    //     $attachmentPath = null;
-    //     if ($surat->lampiran) {
-    //         $attachmentPath = storage_path('app/public/' . $surat->lampiran);
-    //     }
-
-    //     Mail::to($surat->email)->send(new kirimEmail($surat, $attachmentPath));
-
-    //     return back()->with('success', 'Email berhasil dikirim');
-    // }
-
     public function mail($id)
     {
-        $surat = Surat::findOrFail($id);
-
-        // Pastikan lampiran ada
-        $attachmentPath = null;
-        if ($surat->lampiran) {
-            $attachmentPath = storage_path('app/public/' . $surat->lampiran);
-        }
-
         try {
+            $surat = Surat::findOrFail($id);
+
+            // Validasi email format
+            if (!filter_var($surat->email, FILTER_VALIDATE_EMAIL)) {
+                return back()->with('error', 'Format email tidak valid');
+            }
+
+            // Cek lampiran dengan public_path
+            $attachmentPath = null;
+            if ($surat->lampiran) {
+                // Gunakan public_path untuk mengakses file
+                $attachmentPath = public_path('storage/' . $surat->lampiran);
+                
+                // Cek apakah file ada
+                if (!file_exists($attachmentPath)) {
+                    $attachmentPath = null;
+                }
+            }
+
+            // Log untuk debugging
+
+            // Kirim email
             Mail::to($surat->email)->send(new kirimEmail($surat, $attachmentPath));
 
             // Update status menjadi 3 (Terkirim) hanya jika email berhasil dikirim
             $surat->update(['status' => Surat::STATUS_TERKIRIM]);
 
             return back()->with('success', 'Email berhasil dikirim dan status diperbarui');
+            
         } catch (\Exception $e) {
+            // Log error untuk debugging
+            
             return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
         }
     }
 
     public function destroy($id)
     {
-        $surats = Surat::findOrFail($id);
-        $surats->delete();
-        session()->flash('success', 'Surat berhasil dihapus!');
-        return redirect('/surat')->with('success','Surat berhasil dihapus!');
+        $surat = Surat::findOrFail($id);
+        
+        // Delete attachment menggunakan public_path
+        if ($surat->lampiran && file_exists(public_path('storage/' . $surat->lampiran))) {
+            File::delete(public_path('storage/' . $surat->lampiran));
+        }
+        
+        $surat->delete();
+        
+        return redirect('/surat')->with('success', 'Surat berhasil dihapus!');
     }
 }

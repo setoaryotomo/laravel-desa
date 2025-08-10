@@ -38,6 +38,7 @@ class PenghuniController extends Controller
             'tempat_kerja' => 'nullable|string|max:100',
             'status_penghuni' => 'required|in:pemilik rumah,kontrak,boro',
             'file_ktp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'is_kepala_keluarga' => 'required|boolean',
             'no_wa' => 'nullable|string|max:15',
             'kartu_keluarga' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -56,6 +57,13 @@ class PenghuniController extends Controller
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('storage/penghuni/kk'), $filename);
             $validated['kartu_keluarga'] = 'penghuni/kk/' . $filename;
+        }
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/penghuni/foto'), $filename);
+            $validated['foto'] = 'penghuni/foto/' . $filename;
         }
 
         // Tambahkan rumah_id ke data yang divalidasi
@@ -89,11 +97,13 @@ class PenghuniController extends Controller
             'tempat_kerja' => 'nullable|string|max:100',
             'status_penghuni' => 'required|in:pemilik rumah,kontrak,boro',
             'file_ktp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'is_kepala_keluarga' => 'required|boolean',
             'no_wa' => 'nullable|string|max:15',
             'kartu_keluarga' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'hapus_ktp' => 'nullable|boolean',
             'hapus_kk' => 'nullable|boolean',
+            'hapus_foto' => 'nullable|boolean',
         ]);
 
         // Handle file uploads and deletions
@@ -114,6 +124,9 @@ class PenghuniController extends Controller
         }
         if ($penghuni->kartu_keluarga && file_exists(public_path($penghuni->kartu_keluarga))) {
             File::delete(public_path($penghuni->kartu_keluarga));
+        }
+        if ($penghuni->foto && file_exists(public_path($penghuni->foto))) {
+            File::delete(public_path($penghuni->foto));
         }
 
         $penghuni->delete();
@@ -167,6 +180,27 @@ class PenghuniController extends Controller
             $validated['kartu_keluarga'] = 'penghuni/kk/' . $filename;
         } else {
             $validated['kartu_keluarga'] = $penghuni->kartu_keluarga;
+        }
+
+        // Handle foto
+        if ($request->has('hapus_foto') && $request->hapus_foto) {
+            if ($penghuni->foto && file_exists(public_path($penghuni->foto))) {
+                File::delete(public_path($penghuni->foto));
+            }
+            $validated['foto'] = null;
+        } elseif ($request->hasFile('foto')) {
+            // Hapus file lama jika ada
+            if ($penghuni->foto && file_exists(public_path($penghuni->foto))) {
+                File::delete(public_path($penghuni->foto));
+            }
+            
+            // Simpan file baru
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/penghuni/foto'), $filename);
+            $validated['foto'] = 'penghuni/foto/' . $filename;
+        } else {
+            $validated['foto'] = $penghuni->foto;
         }
     }
 }

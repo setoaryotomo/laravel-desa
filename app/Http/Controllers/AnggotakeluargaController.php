@@ -48,6 +48,7 @@ class AnggotakeluargaController extends Controller
             'status_keluarga' => 'required|in:istri,anak,cucu',
             'file_ktp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'no_wa' => 'nullable|string|max:15',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         // Handle file uploads
@@ -62,6 +63,19 @@ class AnggotakeluargaController extends Controller
             
             $file->move(public_path('storage/anggotakeluarga/ktp'), $filename);
             $validated['file_ktp'] = 'anggotakeluarga/ktp/' . $filename;
+        }
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            
+            // Create directory if not exists
+            // if (!file_exists(public_path('storage/anggotakeluarga/foto'))) {
+            //     File::makeDirectory(public_path('storage/anggotakeluarga/foto'), 0755, true);
+            // }
+            
+            $file->move(public_path('storage/anggotakeluarga/foto'), $filename);
+            $validated['foto'] = 'anggotakeluarga/foto/' . $filename;
         }
 
         $validated['penghuni_id'] = $penghuni->id;
@@ -100,6 +114,8 @@ class AnggotakeluargaController extends Controller
             'file_ktp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'no_wa' => 'nullable|string|max:15',
             'hapus_ktp' => 'nullable|boolean',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'hapus_foto' => 'nullable|boolean',
         ]);
 
         // Handle file uploads and deletions
@@ -120,6 +136,10 @@ class AnggotakeluargaController extends Controller
         // Hapus file terkait
         if ($anggotakeluarga->file_ktp && file_exists(public_path($anggotakeluarga->file_ktp))) {
             File::delete(public_path($anggotakeluarga->file_ktp));
+        }
+
+        if ($anggotakeluarga->foto && file_exists(public_path($anggotakeluarga->foto))) {
+            File::delete(public_path($anggotakeluarga->foto));
         }
 
         $anggotakeluarga->delete();
@@ -157,6 +177,32 @@ class AnggotakeluargaController extends Controller
             $validated['file_ktp'] = 'anggotakeluarga/ktp/' . $filename;
         } else {
             $validated['file_ktp'] = $anggotakeluarga->file_ktp;
+        }
+
+        // Handle Foto
+        if ($request->has('hapus_foto') && $request->hapus_foto) {
+            if ($anggotakeluarga->foto && file_exists(public_path($anggotakeluarga->foto))) {
+                File::delete(public_path($anggotakeluarga->foto));
+            }
+            $validated['foto'] = null;
+        } elseif ($request->hasFile('foto')) {
+            // Hapus file lama jika ada
+            if ($anggotakeluarga->foto && file_exists(public_path($anggotakeluarga->foto))) {
+                File::delete(public_path($anggotakeluarga->foto));
+            }
+            
+            // Create directory if not exists
+            // if (!file_exists(public_path('storage/anggotakeluarga/foto'))) {
+            //     File::makeDirectory(public_path('storage/anggotakeluarga/foto'), 0755, true);
+            // }
+            
+            // Simpan file baru
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/anggotakeluarga/foto'), $filename);
+            $validated['foto'] = 'anggotakeluarga/foto/' . $filename;
+        } else {
+            $validated['foto'] = $anggotakeluarga->foto;
         }
     }
 }

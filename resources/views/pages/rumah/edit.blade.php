@@ -121,10 +121,12 @@
                         <div class="mb-3">
                             <label for="foto_tampak_depan" class="form-label">Foto Tampak Depan Rumah</label>
                             
-                            @if($rumah->foto_tampak_depan)
-                                <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $rumah->foto_tampak_depan) }}" 
+                            <div class="mb-2" id="image-preview-container">
+                                @if($rumah->foto_tampak_depan)
+                                <a href="{{ asset('storage/' . $rumah->foto_tampak_depan) }}" target="_blank" class="">
+                                    <img id="current-image-preview" src="{{ asset('storage/' . $rumah->foto_tampak_depan) }}" 
                                          class="img-thumbnail" style="max-width: 300px;">
+                                </a>
                                     <div class="form-check mt-2" style="display: none">
                                         <input class="form-check-input" type="checkbox" 
                                                id="hapus_foto" name="hapus_foto">
@@ -132,8 +134,8 @@
                                             Hapus foto saat disimpan
                                         </label>
                                     </div>
-                                </div>
-                            @endif
+                                @endif
+                            </div>
                             
                             <input type="file" class="form-control @error('foto_tampak_depan') is-invalid @enderror" 
                                    id="foto_tampak_depan" name="foto_tampak_depan" 
@@ -163,20 +165,27 @@
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Hapus preview lama jika ada
-                const oldPreview = document.getElementById('current-image-preview');
-                if (oldPreview) oldPreview.style.display = 'none';
+                const container = document.getElementById('image-preview-container');
                 
-                // Buat atau update preview baru
-                let preview = document.getElementById('new-image-preview');
-                if (!preview) {
-                    preview = document.createElement('div');
-                    preview.id = 'new-image-preview';
-                    preview.className = 'mt-3';
-                    preview.innerHTML = '<h6>Preview Gambar Baru:</h6><img src="" class="img-thumbnail" style="max-width: 300px;">';
-                    event.target.parentNode.appendChild(preview);
+                // Hide current image if exists
+                const currentPreview = document.getElementById('current-image-preview');
+                if (currentPreview) currentPreview.style.display = 'none';
+                
+                // Check if new preview already exists
+                let newPreview = document.getElementById('new-image-preview');
+                
+                if (!newPreview) {
+                    // Create new preview if doesn't exist
+                    newPreview = document.createElement('img');
+                    newPreview.id = 'new-image-preview';
+                    newPreview.className = 'img-thumbnail';
+                    newPreview.style.maxWidth = '300px';
+                    container.insertBefore(newPreview, container.firstChild);
                 }
-                preview.querySelector('img').src = e.target.result;
+                
+                // Set the new image source
+                newPreview.src = e.target.result;
+                newPreview.style.display = 'block';
             }
             reader.readAsDataURL(file);
         }

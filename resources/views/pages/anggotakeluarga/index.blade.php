@@ -52,12 +52,12 @@
                                         'penghuni' => $anggotakeluarga->penghuni_id, 
                                         'anggotakeluarga' => $anggotakeluarga->id
                                         ]) }}" class="d-inline-block mr-2 btn btn-sm btn-warning">
-                                        <i class="fas fa-pen"></i>
+                                        <i class="fas fa-pen"></i> Edit
                                     </a>
                                     <button type="button" class="btn btn-sm btn-danger" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#confirmationDelete-{{ $anggotakeluarga->id }}">
-                                        <i class="fas fa-eraser"></i>
+                                        <i class="fas fa-eraser"></i> Delete
                                     </button>
                                 </div>
                             </td>

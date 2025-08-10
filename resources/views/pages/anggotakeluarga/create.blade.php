@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Tambah Data Penghuni Baru</h3>
+                    <h3 class="card-title">Tambah Data Anggota Keluarga Baru</h3>
                     {{-- <a href="{{ route('penghuni.anggotakeluarga.index', $penghuni->id) }}" class="btn btn-sm btn-secondary float-right">Kembali</a> --}}
                 </div>
                 @if ($errors->any())
@@ -196,16 +196,21 @@
                         </div>
 
                         <div class="row mb-3">
-                            
-
-                            
-
                             <div class="col-md-6">
                                 <label for="file_ktp" class="form-label">Upload KTP (Opsional)</label>
                                 <input type="file" class="form-control @error('file_ktp') is-invalid @enderror" 
                                        id="file_ktp" name="file_ktp" accept=".jpg,.jpeg,.png">
                                 <small class="text-muted">Format: JPG, PNG, Maksimal 2MB</small>
                                 @error('file_ktp')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="foto" class="form-label">Upload foto (Opsional)</label>
+                                <input type="file" class="form-control @error('foto') is-invalid @enderror" 
+                                       id="foto" name="foto" accept=".jpg,.jpeg,.png">
+                                <small class="text-muted">Format: JPG, PNG, Maksimal 2MB</small>
+                                @error('foto')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -245,6 +250,23 @@
         }
     });
 
-    
+    document.getElementById('foto').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let preview = document.getElementById('foto-preview');
+                if (!preview) {
+                    preview = document.createElement('div');
+                    preview.id = 'foto-preview';
+                    preview.className = 'mt-3';
+                    preview.innerHTML = '<h6>Preview foto:</h6><img src="" class="img-thumbnail" style="max-width: 300px;">';
+                    event.target.parentNode.appendChild(preview);
+                }
+                preview.querySelector('img').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
 </script>
 @endsection

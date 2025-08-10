@@ -221,6 +221,18 @@
                         </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="foto" class="form-label">Upload foto (Opsional)</label>
+                                <input type="file" class="form-control @error('foto') is-invalid @enderror" 
+                                       id="foto" name="foto" accept=".jpg,.jpeg,.png">
+                                <small class="text-muted">Format: JPG, PNG, Maksimal 2MB</small>
+                                @error('foto')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="{{ route('rumah.penghuni.index', $rumah->id) }}"><button type="button" class="btn btn-secondary mr-1">Kembali</button></a>
                             <button type="submit" class="btn btn-primary">Simpan Data</button>
@@ -265,6 +277,25 @@
                     preview.id = 'kk-preview';
                     preview.className = 'mt-3';
                     preview.innerHTML = '<h6>Preview KK:</h6><img src="" class="img-thumbnail" style="max-width: 300px;">';
+                    event.target.parentNode.appendChild(preview);
+                }
+                preview.querySelector('img').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('foto').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let preview = document.getElementById('foto-preview');
+                if (!preview) {
+                    preview = document.createElement('div');
+                    preview.id = 'foto-preview';
+                    preview.className = 'mt-3';
+                    preview.innerHTML = '<h6>Preview foto:</h6><img src="" class="img-thumbnail" style="max-width: 300px;">';
                     event.target.parentNode.appendChild(preview);
                 }
                 preview.querySelector('img').src = e.target.result;

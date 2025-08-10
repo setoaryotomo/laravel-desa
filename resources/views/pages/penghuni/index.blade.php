@@ -52,13 +52,13 @@
                                     {{-- @if($penghuni->rumah) --}}
                                         <a href="{{ route('rumah.penghuni.edit', ['rumah' => $penghuni->rumah_id, 'penghuni' => $penghuni->id]) }}" 
                                            class="d-inline-block mr-2 btn btn-sm btn-warning">
-                                            <i class="fas fa-pen"></i>
+                                            <i class="fas fa-pen"></i> Edit
                                         </a>
                                     {{-- @endif --}}
                                     <button type="button" class="btn btn-sm btn-danger" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#confirmationDelete-{{ $penghuni->id }}">
-                                        <i class="fas fa-eraser"></i>
+                                        <i class="fas fa-eraser"></i> Delete
                                     </button>
                                 </div>
                             </td>

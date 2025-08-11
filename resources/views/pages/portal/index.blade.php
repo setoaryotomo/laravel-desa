@@ -88,6 +88,29 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 8px;
+}
+
+.modal-body .detail-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-body .detail-item:last-child {
+    border-bottom: none;
+}
+
+.modal-body .detail-label {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.modal-body .detail-value {
+    color: #7f8c8d;
+}
 </style>
 
 <head>
@@ -125,7 +148,8 @@
     <header id="header" class="header d-flex align-items-center sticky-top">
         <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-            <a href="index.html" class="logo d-flex align-items-center me-auto">
+            {{-- <a href="index.html" class="logo d-flex align-items-center me-auto"> --}}
+            <a href="#hero" class="logo d-flex align-items-center me-auto">
                 <!-- Uncomment the line below if you also wish to use an image logo -->
                 <!-- <img src="{{ asset('enno/assets/img/logo.png') }}" alt=""> -->
                 <h1 class="sitename">eNno</h1>
@@ -133,12 +157,12 @@
 
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <li><a href="#hero" class="active">Home</a></li>
+                    {{-- <li><a href="#hero" class="active">Home</a></li> --}}
                     {{-- <li><a href="#about">About</a></li> --}}
                     <li><a href="#team">Agenda</a></li>
                     <li><a href="#portfolio">Berita</a></li>
                     <li><a href="#portfolio1">Gallery</a></li>
-                    <li class="dropdown"><a href="#"><span>Dropdown</span> <i
+                    {{-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
                                 class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
                             <li><a href="#">Dropdown 1</a></li>
@@ -156,8 +180,9 @@
                             <li><a href="#">Dropdown 3</a></li>
                             <li><a href="#">Dropdown 4</a></li>
                         </ul>
-                    </li>
-                    <li><a href="#contact">Contact</a></li>
+                    </li> --}}
+                    <li><a href="#contact">Permohonan Surat</a></li>
+                    <li><a href="#search">Data Penduduk</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
@@ -170,29 +195,21 @@
     <main class="main">
 
         <!-- Hero Section -->
-        <section id="hero" class="hero section">
+<section id="hero" class="hero" style="background-image: url('https://cdn.pixabay.com/photo/2013/10/10/18/18/landscape-193720_1280.jpg'); background-size: cover; background-position: center;height:500px; position: relative;">
 
-            <div class="container">
-                <div class="row gy-4">
-                    <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center"
-                        data-aos="fade-up">
-                        <h1>Elegant and creative solutions</h1>
-                        <p>We are team of talented designers making websites with Bootstrap</p>
-                        <div class="d-flex">
-                            <a href="#about" class="btn-get-started">Get Started</a>
-                            <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8"
-                                class="glightbox btn-watch-video d-flex align-items-center"><i
-                                    class="bi bi-play-circle"></i><span>Watch Video</span></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="100">
-                        <img src="{{ asset('enno/assets/img/hero-img.png') }}" class="img-fluid animated"
-                            alt="">
-                    </div>
-                </div>
-            </div>
+    <!-- Overlay Dark -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.203); z-index: 1;"></div>
 
-        </section><!-- /Hero Section -->
+    <div class="container" style="padding-top: 140px; position: relative; z-index: 2;">
+        <div class="d-flex justify-content-center" data-aos="fade-up">
+            <h1 style="color: white">Elegant and creative solutions</h1>
+            {{-- <p style="color: white">We are team of talented designers making websites with Bootstrap</p> --}}
+        </div>
+    </div>
+
+</section><!-- /Hero Section -->
+
+
 
 
         <!-- About Section -->
@@ -350,8 +367,8 @@
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <span>Section Title</span>
-                <h2>Contact</h2>
+                <span>Permohonan Surat</span>
+                <h2>Permohonan Surat</h2>
                 <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
             </div><!-- End Section Title -->
 
@@ -359,7 +376,7 @@
 
                 <div class="row gy-4">
 
-                    <div class="col-lg-5">
+                    {{-- <div class="col-lg-5">
 
                         <div class="info-wrap">
                             <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
@@ -391,9 +408,9 @@
                                 frameborder="0" style="border:0; width: 100%; height: 270px;" allowfullscreen=""
                                 loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-lg-7">
+                    <div class="col-lg-12">
 
                         <form action="{{ route('permohonan') }}" class="php-email-form" method="POST"
                             data-aos="fade-up" data-aos-delay="200">
@@ -425,13 +442,13 @@
                                         required="">
                                 </div>
 
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label for="subject-field" class="pb-2">Jenis Surat</label>
                                     <input type="text" class="form-control" name="jenis_surat"
                                         id="inputJenissurat" required="">
                                 </div>
 
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label for="subject-field" class="pb-2">Keterangan</label>
                                     <input type="text" class="form-control" name="keterangan"
                                         id="inputKeterangan" required="">
@@ -475,19 +492,20 @@
     <section id="search" class="search section light-background">
         <div class="container">
             <div class="section-title" data-aos="fade-up">
-                <h2>Pencarian Data Penghuni</h2>
+                <h2>Pencarian Data Penduduk</h2>
                 <p>Cari data penghuni berdasarkan NIK, Nama</p>
             </div>
 
             <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="100">
                 <div class="col-lg-8">
                     <div class="search-box">
-                        <input type="text" id="search-input" class="form-control" placeholder="Masukkan NIK/Nama.">
                         <select id="search-by" class="form-select">
                             <option value="nik">NIK</option>
                             <option value="nama">Nama</option>
                             {{-- <option value="no_kk">No KK</option> --}}
                         </select>
+                        <input type="text" id="search-input" class="form-control" placeholder="Search...">
+                        
                         <button style="display: none" id="search-btn" class="btn btn-primary">Cari</button>
                     </div>
                 </div>
@@ -498,6 +516,25 @@
                     <div id="search-results" class="search-results">
                         <!-- Hasil pencarian akan muncul di sini -->
                     </div>
+                    <!-- Modal untuk Detail Penduduk -->
+<div class="modal fade" id="residentDetailModal" tabindex="-1" aria-labelledby="residentDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="residentDetailModalLabel">Detail Data Penduduk</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content">
+                    <!-- Detail penduduk akan dimuat di sini -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
@@ -608,76 +645,170 @@
             const searchBySelect = document.getElementById('search-by');
             const searchBtn = document.getElementById('search-btn');
             const searchResults = document.getElementById('search-results');
+            const residentDetailModal = new bootstrap.Modal(document.getElementById('residentDetailModal'));
+            const modalContent = document.getElementById('modal-content');
         
             // Fungsi untuk melakukan pencarian
             function performSearch() {
-    const keyword = searchInput.value.trim();
-    const searchBy = searchBySelect.value;
-
-    if (keyword.length === 0) {
-        searchResults.innerHTML = '<div class="no-results">Masukkan kata kunci pencarian</div>';
-        return;
-    }
-
-    // Tampilkan loading
-    searchResults.innerHTML = `
-        <div class="loading-indicator active">
-            <div class="spinner"></div>
-            <p>Mencari data...</p>
-        </div>
-    `;
-
-    fetch(`/api/search?keyword=${encodeURIComponent(keyword)}&search_by=${searchBy}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.length === 0) {
-                searchResults.innerHTML = '<div class="no-results">Tidak ditemukan data yang sesuai</div>';
-                return;
-            }
-
-            let html = '';
-            data.forEach(item => {
-                if (item.type === 'penghuni') {
-                    html += `
-                        <div class="result-item penghuni">
-                            <div class="result-title">
-                                ${item.nama} 
-                                <span class="badge bg-primary">Kepala Keluarga</span>
-                            </div>
-                            <div class="result-detail">
-                                <span>NIK: <b>${item.nik}</b></span>
-                                <span>Status: <b>${item.status_penghuni}</b></span>
-                                <span>Alamat: <b>${item.rumah.alamat_lengkap} RT ${item.rumah.rt} RW ${item.rumah.rw} Kelurahan ${item.rumah.kelurahan}</b></span>
-                                <span>Kodepos: <b>${item.rumah.kode_pos}</b></span>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    html += `
-                        <div class="result-item anggota">
-                            <div class="result-title">
-                                ${item.nama} 
-                                <span class="badge bg-success">Anggota Keluarga</span>
-                            </div>
-                            <div class="result-detail">
-                                <span>NIK: <b>${item.nik}</b></span>
-                                <span>Status: <b>${item.status_keluarga}</b></span>
-                                <span>Kepala Keluarga: <b>${item.penghuni?.nama_kepala_keluarga || '-'}</b></span>
-                                <span>Alamat: <b>${item.penghuni.rumah.alamat_lengkap} RT ${item.penghuni.rumah.rt} RW ${item.penghuni.rumah.rw} Kelurahan ${item.penghuni.rumah.kelurahan}</b></span>
-                                <span>Kodepos: <b>${item.penghuni.rumah.kode_pos}</b></span>
-                            </div>
-                        </div>
-                    `;
+                const keyword = searchInput.value.trim();
+                const searchBy = searchBySelect.value;
+        
+                if (keyword.length === 0) {
+                    searchResults.innerHTML = '<div class="no-results">Masukkan kata kunci pencarian</div>';
+                    return;
                 }
-            });
+        
+                // Tampilkan loading
+                searchResults.innerHTML = `
+                    <div class="loading-indicator active">
+                        <div class="spinner"></div>
+                        <p>Mencari data...</p>
+                    </div>
+                `;
+        
+                fetch(`/api/search?keyword=${encodeURIComponent(keyword)}&search_by=${searchBy}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            searchResults.innerHTML = '<div class="no-results">Tidak ditemukan data yang sesuai</div>';
+                            return;
+                        }
+        
+                        let html = '';
+                        data.forEach((item, index) => {
+                            if (item.type === 'penghuni') {
+                                html += `
+                                    <div class="result-item penghuni" data-index="${index}" style="cursor: pointer;">
+                                        <div class="result-title">
+                                            ${item.nama} 
+                                        </div>
+                                        <div class="result-detail">
+                                            <span class="badge bg-primary" style="display:none">
+                                                ${item.is_kepala_keluarga == 1 ? 'Kepala Keluarga' : 'Anggota Keluarga'}
+                                            </span>
+                                            <span>NIK: <b>${item.nik}</b></span>
+                                            <span style="display:none">NIK: <b>${item.foto}</b></span>
+                                            <span>Status: <b>${item.status_penghuni}</b></span>
+                                            <span style="display:none">Alamat: <b>${item.rumah.alamat_lengkap} No.${item.rumah.no_rumah} RT ${item.rumah.rt} RW ${item.rumah.rw} Kelurahan ${item.rumah.kelurahan}</b></span>
+                                            <span style="display:none">Kodepos: <b>${item.rumah.kode_pos}</b></span>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                html += `
+                                    <div class="result-item anggota" data-index="${index}" style="cursor: pointer;">
+                                        <div class="result-title">
+                                            ${item.nama} 
+                                        </div>
+                                        <div class="result-detail">
+                                            <span class="badge bg-success" style="display:none">Anggota Keluarga</span>
+                                            <span>NIK: <b>${item.nik}</b></span>
+                                            <span style="display:none">NIK: <b>${item.foto}</b></span>
+                                            <span>Status: <b>${item.status_keluarga}</b></span>
+                                            <span>Kepala Keluarga: <b>${item.penghuni?.nama_kepala_keluarga || '-'}</b></span>
+                                            <span style="display:none">Alamat: <b>${item.penghuni.rumah.alamat_lengkap} No.${item.penghuni.rumah.no_rumah} RT ${item.penghuni.rumah.rt} RW ${item.penghuni.rumah.rw} Kelurahan ${item.penghuni.rumah.kelurahan}</b></span>
+                                            <span style="display:none">Kodepos: <b>${item.penghuni.rumah.kode_pos}</b></span>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        });
 
-            searchResults.innerHTML = html;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            searchResults.innerHTML = '<div class="no-results">Terjadi kesalahan saat melakukan pencarian</div>';
-        });
-}
+                        
+        
+                        searchResults.innerHTML = html;
+        
+                        // Simpan data pencarian untuk digunakan saat membuka modal
+                        searchResults.dataset.results = JSON.stringify(data);
+        
+                        // Tambahkan event listener untuk setiap item hasil pencarian
+                        document.querySelectorAll('.result-item').forEach(item => {
+                            item.addEventListener('click', function() {
+                                const index = this.dataset.index;
+                                const results = JSON.parse(searchResults.dataset.results);
+                                const selectedItem = results[index];
+        
+                                // Isi konten modal
+                                let modalHtml = '';
+                                if (selectedItem.type === 'penghuni') {
+                                    modalHtml = `
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <img id="d-flex align-items-center justify-content-center" src="{{ asset('storage/') }}/${selectedItem.foto}" 
+                                            class="img-thumbnail" style="width: 250px;">
+                                    </div>
+
+                                    <div class="detail-item">
+                                        <span class="detail-label">Nama:</span>
+                                        <span class="detail-value">${selectedItem.nama}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Status:</span>
+                                        <span class="detail-value">${selectedItem.is_kepala_keluarga == 1 ? 'Kepala Keluarga' : 'Anggota Keluarga'}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">NIK:</span>
+                                        <span class="detail-value">${selectedItem.nik}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Status Penghuni:</span>
+                                        <span class="detail-value">${selectedItem.status_penghuni}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Alamat:</span>
+                                        <span class="detail-value">${selectedItem.rumah.alamat_lengkap} No.${selectedItem.rumah.no_rumah} RT ${selectedItem.rumah.rt} RW ${selectedItem.rumah.rw} Kelurahan ${selectedItem.rumah.kelurahan}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Kodepos:</span>
+                                        <span class="detail-value">${selectedItem.rumah.kode_pos}</span>
+                                    </div>
+                                    `;
+                                } else {
+                                    modalHtml = `
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img id="d-flex align-items-center justify-content-center" src="{{ asset('storage/') }}/${selectedItem.foto}" 
+                                                class="img-thumbnail" style="width: 250px;">
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Nama:</span>
+                                            <span class="detail-value">${selectedItem.nama}</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Status:</span>
+                                            <span class="detail-value">Anggota Keluarga</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">NIK:</span>
+                                            <span class="detail-value">${selectedItem.nik}</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Status Keluarga:</span>
+                                            <span class="detail-value">${selectedItem.status_keluarga}</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Kepala Keluarga:</span>
+                                            <span class="detail-value">${selectedItem.penghuni?.nama_kepala_keluarga || '-'}</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Alamat:</span>
+                                            <span class="detail-value">${selectedItem.penghuni.rumah.alamat_lengkap} No.${selectedItem.penghuni.rumah.no_rumah} RT ${selectedItem.penghuni.rumah.rt} RW ${selectedItem.penghuni.rumah.rw} Kelurahan ${selectedItem.penghuni.rumah.kelurahan}</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Kodepos:</span>
+                                            <span class="detail-value">${selectedItem.penghuni.rumah.kode_pos}</span>
+                                        </div>
+                                    `;
+                                }
+        
+                                modalContent.innerHTML = modalHtml;
+                                residentDetailModal.show();
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        searchResults.innerHTML = '<div class="no-results">Terjadi kesalahan saat melakukan pencarian</div>';
+                    });
+            }
         
             // Event listener untuk tombol cari
             searchBtn.addEventListener('click', performSearch);
@@ -701,4 +832,3 @@
 </body>
 
 </html>
-

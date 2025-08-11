@@ -56,7 +56,7 @@ public function apiSearch(Request $request)
     // Query untuk Penghuni (Kepala Keluarga)
     // $penghuni = Penghuni::query();
     $penghuni = Penghuni::query()->with(['rumah' => function($query) {
-        $query->select('id', 'alamat_lengkap', 'rt', 'rw' ,'kelurahan','kode_pos');
+        $query->select('id', 'no_rumah','alamat_lengkap', 'rt', 'rw' ,'kelurahan','kode_pos');
     }]);
     
     // Query untuk Anggota Keluarga
@@ -69,7 +69,7 @@ public function apiSearch(Request $request)
             $query->select('id', 'nama as nama_kepala_keluarga', 'rumah_id');
         },
         'penghuni.rumah' => function($query) {
-            $query->select('id', 'alamat_lengkap', 'rt', 'rw', 'kelurahan', 'kode_pos');
+            $query->select('id','no_rumah', 'alamat_lengkap', 'rt', 'rw', 'kelurahan', 'kode_pos');
         }
     ]);
 

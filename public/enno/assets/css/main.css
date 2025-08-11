@@ -873,12 +873,12 @@ section,
 # Hero Section
 --------------------------------------------------------------*/
 .hero {
-  width: 100%;
-  min-height: 70vh;
-  position: relative;
-  padding: 120px 0 60px 0;
-  display: flex;
-  align-items: center;
+  /* width: 100%; */
+  /* min-height: 70vh; */
+  /* position: relative; */
+  /* padding: 120px 0 60px 0; */
+  /* display: flex;
+  align-items: center; */
 }
 
 .hero h1 {

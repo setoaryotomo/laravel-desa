@@ -75,7 +75,11 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <a class="btn-getstarted" href="/login">Login</a>
+        @auth
+            <a class="btn-getstarted" href="/dashboard">Dashboard</a>
+        @else
+            <a class="btn-getstarted" href="/login">Login</a>
+        @endauth
 
     </div>
 </header>

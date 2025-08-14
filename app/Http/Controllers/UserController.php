@@ -17,9 +17,9 @@ class UserController extends Controller
     }
 
     public function account_approval(Request $request, $userId) {
-        $request->validate([
-            'for' => ['required', Rule::in(['approve', 'reject', 'activate',' deactivate'])],
-        ]);
+        // $request->validate([
+        //     'for' => ['required', Rule::in(['approve', 'reject', 'activate',' deactivate'])],
+        // ]);
         
         $for = $request->input('for');
         
@@ -27,9 +27,9 @@ class UserController extends Controller
         $user->status = ($for == 'approve' || $for == 'activate') ? 'approved' : 'rejected';
         $user->save();
 
-        // if (in_array($for, ['activate', 'deactivate'])) {
-        //     return back()->with('success', $for == 'activate' ? 'Berhasil mengaktifkan akun' : 'Berhasil menon-aktifkan akun');
-        // }
+        if (in_array($for, ['activate', 'deactivate'])) {
+            return back()->with('success', $for == 'activate' ? 'Berhasil mengaktifkan akun' : 'Berhasil menon-aktifkan akun');
+        }
 
         if ($for == 'activate') {
             return back()->with('success', 'Berhasil mengaktifkan akun');

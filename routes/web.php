@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [PortalController::class, 'homepage']);
+Route::get('/berita/{id}', [PortalController::class, 'berita'])->name('portal.berita');
+Route::get('/agenda/{id}', [PortalController::class, 'agenda'])->name('portal.agenda');
+Route::get('/gallery/{id}', [PortalController::class, 'gallery'])->name('portal.gallery');
+Route::get('/gallery/{gallery}', [PortalController::class, 'gallery'])->name('gallery');
+Route::get('/agenda/{agenda}', [PortalController::class, 'agenda'])->name('agenda');
 Route::get('/api/search', [PortalController::class, 'apiSearch'])->name('api.search');
 
 // Auth
@@ -29,11 +34,12 @@ Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/register', [AuthController::class, 'registerView']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard')->middleware('role:Admin,User');
 
 // Route Dashboard
-Route::get('/dashboard', function () {
-    return view('pages.dashboard');
-})->name('dashboard')->middleware('role:Admin,User');
+// Route::get('/dashboard', function () {
+//     return view('pages.dashboard');
+// })->name('dashboard')->middleware('role:Admin,User');
 
 // Route untuk Rumah
 Route::prefix('rumah')->middleware('role:Admin,User')->group(function () {

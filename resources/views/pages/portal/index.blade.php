@@ -159,9 +159,9 @@
                 <ul>
                     {{-- <li><a href="#hero" class="active">Home</a></li> --}}
                     {{-- <li><a href="#about">About</a></li> --}}
-                    <li><a href="#team">Agenda</a></li>
-                    <li><a href="#portfolio">Berita</a></li>
-                    <li><a href="#portfolio1">Gallery</a></li>
+                    <li><a href="#agenda">Agenda</a></li>
+                    <li><a href="#berita">Berita</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
                     {{-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i
                                 class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
@@ -181,7 +181,7 @@
                             <li><a href="#">Dropdown 4</a></li>
                         </ul>
                     </li> --}}
-                    <li><a href="#contact">Permohonan Surat</a></li>
+                    <li><a href="#surat">Permohonan Surat</a></li>
                     <li><a href="#search">Data Penduduk</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -227,7 +227,7 @@
                 <div class="row gy-4">
                     <div class="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="100">
                         <img src="{{ asset('enno/assets/img/about.png') }}" class="img-fluid" alt="">
-                        <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
+                        {{-- <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a> --}}
                     </div>
                     <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="200">
                         <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
@@ -260,7 +260,7 @@
 
 
         <!-- Team Section -->
-        <section id="team" class="team section">
+        <section id="agenda" class="team section">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
@@ -275,6 +275,7 @@
 
                     @foreach ($agendas as $agenda)
                         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                            <a href="{{ route('portal.agenda', $agenda->id) }}" class="img-link">
                             <div class="member">
                                 <div class="pic"><img src="{{ asset('storage/' . $agenda->foto_agenda) }}"
                                         class="img-fluid" alt=""></div>
@@ -286,6 +287,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </a>
                         </div><!-- End Team Member -->
                     @endforeach
 
@@ -296,7 +298,7 @@
         </section><!-- /Team Section -->
 
         <!-- Portfolio Section -->
-        <section id="portfolio" class="portfolio section light-background">
+        <section id="berita" class="portfolio section light-background">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
@@ -314,13 +316,13 @@
                                 <img src="{{ asset('storage/' . $berita->foto_berita) }}" class="img-fluid"
                                     alt="">
                                 <div class="portfolio-info">
+                                    <a href="{{ route('portal.berita', $berita->id) }}" class="img-link">
                                     <h4>{{ $berita->judul }}</h4>
                                     <p>{{ $berita->deskripsi }}</p>
                                     <a href="{{ asset('storage/' . $berita->foto_berita) }}"
-                                        title="{{ $berita->judul }}" data-gallery="portfolio-gallery-app"
-                                        class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                                    <a href="portfolio-details.html" title="More Details" class="details-link"><i
-                                            class="bi bi-link-45deg"></i></a>
+                                        title="{{ $berita->judul }}" data-gallery=""
+                                        class="glightbox preview-link"></a>
+                                    </a>
                                 </div>
                             </div><!-- End Portfolio Item -->
                         @endforeach
@@ -331,7 +333,7 @@
 
 
         <!-- Portfolio Section -->
-        <section id="portfolio1" class="portfolio section">
+        <section id="gallery" class="portfolio section">
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
                 <span>Gallery</span>
@@ -344,17 +346,21 @@
                     <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
                         @foreach ($gallerys as $gallery)
                             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+                                <a href="{{ asset('storage/' . $gallery->foto_gallery) }}"
+                                    title="{{ $gallery->judul }}" data-gallery="portfolio-gallery-app"
+                                    class="glightbox preview-link">
                                 <img src="{{ asset('storage/' . $gallery->foto_gallery) }}" class="img-fluid"
                                     alt="">
                                 <div class="portfolio-info">
                                     <h4>{{ $gallery->judul }}</h4>
-                                    <p>{{ $gallery->deskripsi }}</p>
-                                    <a href="{{ asset('storage/' . $gallery->foto_gallery) }}"
+                                    {{-- <p>{{ $gallery->deskripsi }}</p> --}}
+                                    {{-- <a href="{{ asset('storage/' . $gallery->foto_gallery) }}"
                                         title="{{ $gallery->judul }}" data-gallery="portfolio-gallery-app"
-                                        class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                                    <a href="portfolio-details.html" title="More Details" class="details-link"><i
-                                            class="bi bi-link-45deg"></i></a>
+                                        class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a> --}}
+                                    {{-- <a href="portfolio-details.html" title="More Details" class="details-link"><i
+                                            class="bi bi-link-45deg"></i></a> --}}
                                 </div>
+                                </a>
                             </div><!-- End Portfolio Item -->
                         @endforeach
                     </div><!-- End Portfolio Container -->
@@ -363,7 +369,7 @@
         </section><!-- /Portfolio Section -->
 
         <!-- Contact Section -->
-        <section id="contact" class="contact section">
+        <section id="surat" class="contact section">
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">

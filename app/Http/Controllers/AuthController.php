@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agenda;
+use App\Models\Anggotakeluarga;
+use App\Models\Berita;
+use App\Models\Gallery;
+use App\Models\Penghuni;
+use App\Models\Rumah;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +20,17 @@ class AuthController extends Controller
             return back();
         }
         return view('pages.auth.login');
+    }
+
+    public function dashboard() {
+        $rumahs = Rumah::all();
+        $penghunis = Penghuni::all();
+        $anggotas = Anggotakeluarga::all();
+        $beritas = Berita::all();
+        $gallerys = Gallery::all();
+        $agendas = Agenda::all();
+        $users = User::all();
+        return view('pages.dashboard', compact('rumahs','penghunis','anggotas','beritas','gallerys','agendas','users'));
     }
 
 
@@ -77,9 +94,10 @@ class AuthController extends Controller
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
         $user->role_id = 2; // User (penduduk)
+        $user->status = 'approved';
         $user->saveOrFail();
 
-        return redirect('/')->with('success','Berhasil daftar akun, tunggu persetujuan');
+        return redirect('/login')->with('success','Berhasil daftar akun, tunggu persetujuan');
     }
 
     public function _logout(Request $request) {

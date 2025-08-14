@@ -41,17 +41,47 @@
                 'path' => 'account-list',
                 'icon' => 'fas fa-fw fa-user',
             ],
-            (object) [
-                'title' => 'Permintaan Akun',
-                'path' => 'account-request',
-                'icon' => 'fas fa-fw fa-user',
-            ],
+            // (object) [
+            //     'title' => 'Permintaan Akun',
+            //     'path' => 'account-request',
+            //     'icon' => 'fas fa-fw fa-user',
+            // ],
         ],
         2 => [
             (object) [
                 'title' => ' Dashboard',
                 'path' => 'dashboard',
                 'icon' => 'fas fa-fw fa-tachometer-alt',
+            ],
+            (object) [
+                'title' => 'Rumah',
+                'path' => 'rumah',
+                'icon' => 'fas fa-fw fa-home',
+            ],
+            (object) [
+                'title' => 'Permohonan Surat',
+                'path' => 'surat',
+                'icon' => 'fas fa-fw fa-book',
+            ],
+            // (object) [
+            //     'title' => 'Jenis Surat',
+            //     'path' => 'jenissurat',
+            //     'icon' => 'fas fa-fw fa-book',
+            // ],
+            (object) [
+                'title' => 'Berita',
+                'path' => 'berita',
+                'icon' => 'fas fa-fw fa-newspaper',
+            ],
+            (object) [
+                'title' => 'Agenda',
+                'path' => 'agenda',
+                'icon' => 'fas fa-fw fa-calendar',
+            ],
+            (object) [
+                'title' => 'Gallery',
+                'path' => 'gallery',
+                'icon' => 'fas fa-fw fa-image',
             ],
             // (object) [
             //     'title' =>'Rumah',

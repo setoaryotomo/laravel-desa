@@ -22,6 +22,20 @@ class PortalController extends Controller
         ]);
     }
 
+    public function berita($id){
+        $berita = Berita::findOrFail($id);
+        return view('pages.portal.detail.berita', compact('berita'));
+    }
+    public function agenda($id){
+        $agenda = Agenda::findOrFail($id);
+        return view('pages.portal.detail.agenda', compact('agenda'));
+    }
+    public function gallery($id){
+        $gallery = gallery::findOrFail($id);
+        return view('pages.portal.detail.gallery', compact('gallery'));
+    }
+    
+
 //     public function apiSearch(Request $request)
 // {
 //     $keyword = $request->input('keyword');

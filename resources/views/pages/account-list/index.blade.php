@@ -26,8 +26,8 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>Email</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
+                                    {{-- <th>Status</th> --}}
+                                    {{-- <th>Aksi</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,7 +36,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>
+                                        {{-- <td>
                                             @if ($user->status == 'approved')
                                                 <span class="badge badge-success">Aktif</span>
                                             @else
@@ -60,7 +60,7 @@
                                                 @endif
 
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                     @include('pages.account-list.confirmation-approve')
                                     @include('pages.account-list.confirmation-reject')

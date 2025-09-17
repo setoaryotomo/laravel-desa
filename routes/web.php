@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [PortalController::class, 'homepage']);
-Route::get('/berita/{id}', [PortalController::class, 'berita'])->name('portal.berita');
-Route::get('/agenda/{id}', [PortalController::class, 'agenda'])->name('portal.agenda');
-Route::get('/gallery/{id}', [PortalController::class, 'gallery'])->name('portal.gallery');
-Route::get('/gallery/{gallery}', [PortalController::class, 'gallery'])->name('gallery');
-Route::get('/agenda/{agenda}', [PortalController::class, 'agenda'])->name('agenda');
+Route::get('/detail-berita/{id}', [PortalController::class, 'berita'])->name('portal.berita');
+Route::get('/detail-agenda/{id}', [PortalController::class, 'agenda'])->name('portal.agenda');
+Route::get('/detail-gallery/{id}', [PortalController::class, 'gallery'])->name('portal.gallery');
+Route::get('/portal-gallery/{gallery}', [PortalController::class, 'gallery'])->name('gallery');
+Route::get('/portal-agenda/{agenda}', [PortalController::class, 'agenda'])->name('agenda');
 Route::get('/api/search', [PortalController::class, 'apiSearch'])->name('api.search');
 
 // Auth
@@ -121,12 +121,16 @@ Route::prefix('surat')->middleware('role:Admin,User')->group(function () {
     Route::post('/', [SuratController::class, 'store'])->name('surat.store');
     Route::get('/{surat}', [SuratController::class, 'show'])->name('surat.show');
     Route::get('/{surat}/email', [SuratController::class, 'mail'])->name('surat.mail');
+    Route::get('/{surat}/tolak', [SuratController::class, 'tolak'])->name('surat.tolak');
     Route::get('/{surat}/edit', [SuratController::class, 'edit'])->name('surat.edit');
     Route::put('/{surat}', [SuratController::class, 'update'])->name('surat.update');
     Route::delete('/{surat}', [SuratController::class, 'destroy'])->name('surat.destroy');
 });
 
-Route::post('/permohonan', [SuratController::class, 'permohonan'])->name('permohonan');
+// Route::post('/permohonan', [SuratController::class, 'permohonan'])->name('permohonan');
+Route::post('/permohonan', [PortalController::class, 'permohonan'])->name('permohonan');
+
+Route::get('/api/autocomplete-resident', [PortalController::class, 'apiAutocompleteResident']);
 
 Route::get('/account-list', [UserController::class, 'account_list_view'])->middleware('role:Admin');
 Route::get('/account-request', [UserController::class, 'account_request_view'])->middleware('role:Admin');

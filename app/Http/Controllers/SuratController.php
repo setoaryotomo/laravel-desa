@@ -84,7 +84,9 @@ class SuratController extends Controller
 
         $surat->update($validated);
 
-        return redirect()->route('surat.index')->with('success', 'Surat berhasil dibuat');
+        // return redirect()->route('surat.index')->with('success', 'Surat berhasil dibuat');
+        return redirect()->route('surat.edit', $surat->id)->with('success', 'Surat berhasil dibuat');
+        
     }
 
     public function mail($id)
@@ -118,6 +120,42 @@ class SuratController extends Controller
             $surat->update(['status' => Surat::STATUS_TERKIRIM]);
 
             return back()->with('success', 'Email berhasil dikirim dan status diperbarui');
+            
+        } catch (\Exception $e) {
+            // Log error untuk debugging
+            
+            return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
+        }
+    }
+
+    public function tolak($id)
+    {
+        try {
+            $surat = Surat::findOrFail($id);
+
+            // Validasi email format
+            if (!filter_var($surat->email, FILTER_VALIDATE_EMAIL)) {
+                return back()->with('error', 'Format email tidak valid');
+            }
+
+            // Cek lampiran dengan public_path
+            $attachmentPath = null;
+            if ($surat->lampiran) {
+                // Gunakan public_path untuk mengakses file
+                $attachmentPath = public_path('storage/' . $surat->lampiran);
+                
+                // Cek apakah file ada
+                if (!file_exists($attachmentPath)) {
+                    $attachmentPath = null;
+                }
+            }
+
+            // Log untuk debugging
+
+            // Update status menjadi 3 (Terkirim) hanya jika email berhasil dikirim
+            $surat->update(['status' => Surat::STATUS_DITOLAK]);
+
+            return back()->with('success', 'Email berhasil ditolak');
             
         } catch (\Exception $e) {
             // Log error untuk debugging

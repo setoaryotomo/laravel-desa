@@ -55,17 +55,25 @@
 
                             <div class="col-md-2">
                                 <label for="rt" class="form-label">RT</label>
-                                <input type="text" class="form-control @error('rt') is-invalid @enderror" 
-                                       id="rt" name="rt" value="{{ old('rt') }}" required>
+                                <select class="form-control @error('rt') is-invalid @enderror" id="rt" name="rt" required>
+                                    <option value="" disabled {{ old('rt') == '' ? 'selected' : '' }}>1 - 10</option>
+                                    @for ($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}" {{ old('rt') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
+                                </select>
                                 @error('rt')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
+                            
                             <div class="col-md-2">
                                 <label for="rw" class="form-label">RW</label>
-                                <input type="text" class="form-control @error('rw') is-invalid @enderror" 
-                                       id="rw" name="rw" value="{{ old('rw') }}" required>
+                                <select class="form-control @error('rw') is-invalid @enderror" id="rw" name="rw" required>
+                                    <option value="" disabled {{ old('rw') == '' ? 'selected' : '' }}>1 - 10</option>
+                                    @for ($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}" {{ old('rw') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
+                                </select>
                                 @error('rw')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -83,7 +91,7 @@
                             <div class="col-md-3">
                                 <label for="kode_pos" class="form-label">Kode Pos</label>
                                 <input type="text" class="form-control @error('kode_pos') is-invalid @enderror" 
-                                       id="kode_pos" name="kode_pos" value="{{ old('kode_pos') }}" required>
+                                       id="kode_pos" name="kode_pos" value="50149" readonly>
                                 @error('kode_pos')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

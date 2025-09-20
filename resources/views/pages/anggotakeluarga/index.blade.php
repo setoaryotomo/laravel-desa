@@ -24,32 +24,38 @@
                     <table class="table table-bordered table-hover align-middle mb-0">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 50px;">No</th>
+                                <th class="text-center">No</th>
+                                <th>Foto</th>
                                 <th>Nama</th>
-                                <th class="d-none d-md-table-cell">NIK</th>
-                                <th class="text-center d-none d-sm-table-cell">Jenis Kelamin</th>
+                                {{-- <th class="d-none d-md-table-cell">NIK</th> --}}
+                                {{-- <th class="text-center d-none d-sm-table-cell">Jenis Kelamin</th> --}}
                                 <th class="d-none d-lg-table-cell">Status Keluarga</th>
-                                <th class="d-none d-xl-table-cell text-center">Tgl Lahir</th>
-                                <th class="text-center" style="width: 150px;">Aksi</th>
+                                {{-- <th class="d-none d-xl-table-cell text-center">Tgl Lahir</th> --}}
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($anggotakeluargas as $anggotakeluarga)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">
+                                    <img src="{{ asset('storage/' . $penghuni->foto) }}" 
+                                         class="img-fluid rounded" 
+                                         style="max-height: 80px; width: auto;">
+                                </td>
                                 <td>
-                                    <div class="text-truncate" style="max-width: 150px;" title="{{ $anggotakeluarga->nama }}">
+                                    <div class="text-truncate" title="{{ $anggotakeluarga->nama }}">
                                         {{ $anggotakeluarga->nama }}
                                     </div>
                                 </td>
-                                <td class="d-none d-md-table-cell">{{ $anggotakeluarga->nik }}</td>
-                                <td class="text-center d-none d-sm-table-cell">{{ $anggotakeluarga->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                                {{-- <td class="d-none d-md-table-cell">{{ $anggotakeluarga->nik }}</td> --}}
+                                {{-- <td class="text-center d-none d-sm-table-cell">{{ $anggotakeluarga->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td> --}}
                                 <td class="d-none d-lg-table-cell">
-                                    <div class="text-truncate" style="max-width: 120px;" title="{{ ucwords($anggotakeluarga->status_keluarga) }}">
+                                    <div class="text-truncate" title="{{ ucwords($anggotakeluarga->status_keluarga) }}">
                                         {{ ucwords($anggotakeluarga->status_keluarga) }}
                                     </div>
                                 </td>
-                                <td class="d-none d-xl-table-cell text-center">{{ \Carbon\Carbon::parse($anggotakeluarga->tgl_lahir)->format('d/m/Y') }}</td>
+                                {{-- <td class="d-none d-xl-table-cell text-center">{{ \Carbon\Carbon::parse($anggotakeluarga->tgl_lahir)->format('d/m/Y') }}</td> --}}
                                 <td class="text-center">
                                     <div class="d-flex flex-nowrap justify-content-center">
                                         <a href="{{ route('penghuni.anggotakeluarga.edit', [
@@ -59,14 +65,14 @@
                                             ]) }}" 
                                            class="d-inline-block mr-1 mr-sm-2 btn btn-sm btn-warning"
                                            title="Edit Anggota Keluarga">
-                                            <i class="fas fa-pen d-md-none"></i>
+                                            <i class="fas fa-pen"></i>
                                             <span class="d-none d-md-inline">Edit</span>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-danger" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#confirmationDelete-{{ $anggotakeluarga->id }}"
                                                 title="Hapus Anggota Keluarga">
-                                            <i class="fas fa-eraser d-md-none"></i>
+                                            <i class="fas fa-eraser"></i>
                                             <span class="d-none d-md-inline">Hapus</span>
                                         </button>
                                     </div>

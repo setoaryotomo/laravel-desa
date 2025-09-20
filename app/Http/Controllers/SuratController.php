@@ -5,17 +5,43 @@ namespace App\Http\Controllers;
 use App\Mail\kirimEmail;
 use App\Models\Surat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class SuratController extends Controller
 {
-    public function index()
-    {
-        $surats = Surat::orderBy('created_at', 'desc')->get();
-        return view('pages.surat.index', compact('surats'));
+    public function index(Request $request)
+{
+    $user = Auth::user();
+
+    $query = Surat::query()->orderBy('created_at', 'desc');
+
+    if ($user->role_id == 3) { // Role RW
+        $query->where('rw', $user->rw);
+    } elseif ($user->role_id == 4) { // Role RT
+        $query->where('rt', $user->rt)->where('rw', $user->rw);
     }
+
+    // Filter status
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    // Search by nama / nik
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('nama', 'like', '%' . $request->search . '%')
+              ->orWhere('nik', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    $surats = $query->get();
+
+    return view('pages.surat.index', compact('surats'));
+}
+
 
     public function permohonan(Request $request)
     {

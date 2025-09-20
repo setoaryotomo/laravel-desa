@@ -32,6 +32,45 @@
     <h1 class="h3 mb-2 mb-sm-0 text-gray-800">Data Surat</h1>
 </div>
 
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="GET" action="{{ route('surat.index') }}">
+            <div class="row g-2">
+                {{-- Filter Status --}}
+                <div class="col-12 col-md-3 mb-2 mb-md-0">
+                    <select name="status" class="form-control">
+                        <option value="">-- Filter Status --</option>
+                        <option value="1" {{ request('status') == 1 ? 'selected' : '' }}>Proses</option>
+                        <option value="2" {{ request('status') == 2 ? 'selected' : '' }}>Disetujui</option>
+                        <option value="3" {{ request('status') == 3 ? 'selected' : '' }}>Terkirim</option>
+                        <option value="4" {{ request('status') == 4 ? 'selected' : '' }}>Ditolak</option>
+                    </select>
+                </div>
+
+                {{-- Search --}}
+                <div class="col-12 col-md-3 mb-2 mb-md-0">
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        class="form-control" placeholder="Cari nama / NIK...">
+                </div>
+
+                {{-- Tombol --}}
+                <div class="col-12 col-md-3">
+                    <div class="d-grid d-sm-flex gap-2">
+                        <button type="submit" class="btn btn-primary mr-2">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                        <a href="{{ route('surat.index') }}" class="btn btn-secondary">
+                            Reset
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 <div class="row">
     <div class="col-12">
         <div class="card shadow-sm">

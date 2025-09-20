@@ -45,7 +45,25 @@
                             </div>
 
                             <div class="row mb-3">
-                                <div class="col-md-6">
+                                <div class="col-md-2">
+                                    <label for="rt" class="form-label">rt</label>
+                                    <input type="text" class="form-control @error('rt') is-invalid @enderror"
+                                        id="rt" name="rt" value="{{ old('rt', $surat->rt) }}" required
+                                        readonly>
+                                    @error('rt')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="rw" class="form-label">rw</label>
+                                    <input type="text" class="form-control @error('rw') is-invalid @enderror"
+                                        id="rw" name="rw" value="{{ old('rw', $surat->rw) }}" required
+                                        readonly>
+                                    @error('rw')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-2">
                                     <label for="telepon" class="form-label">telepon</label>
                                     <input type="text" class="form-control @error('telepon') is-invalid @enderror"
                                         id="telepon" name="telepon" value="{{ old('telepon', $surat->telepon) }}" required

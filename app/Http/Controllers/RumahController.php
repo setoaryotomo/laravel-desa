@@ -4,32 +4,72 @@ namespace App\Http\Controllers;
 
 use App\Models\Rumah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RumahController extends Controller
 {
-    public function index()
-    {
-        $rumahs = Rumah::all();
-        return view('pages.rumah.index', compact('rumahs'));
+    public function index(Request $request)
+{
+    $user = Auth::user();
+    
+    $query = Rumah::query();
+
+    // Filter otomatis berdasarkan role
+    if ($user->role_id == 3) { // Role RW
+        $query->where('rw', $user->rw);
+    } elseif ($user->role_id == 4) { // Role RT
+        $query->where('rt', $user->rt)->where('rw', $user->rw);
     }
+
+    // Filter tambahan dari form
+    if ($request->filled('rt')) {
+        $query->where('rt', $request->rt);
+    }
+    if ($request->filled('rw')) {
+        $query->where('rw', $request->rw);
+    }
+
+    $rumahs = $query->get();
+
+    return view('pages.rumah.index', compact('rumahs'));
+}
+
 
     public function create()
     {
         return view('pages.rumah.create');
     }
+    
     public function edit($id)
     {
         $rumah = Rumah::findOrFail($id);
+        
+        // Authorization check untuk RW dan RT
+        $user = Auth::user();
+        if ($user->role_id == 3 && $rumah->rw != $user->rw) {
+            abort(403, 'Unauthorized action.');
+        } elseif ($user->role_id == 4 && ($rumah->rt != $user->rt || $rumah->rw != $user->rw)) {
+            abort(403, 'Unauthorized action.');
+        }
 
         return view('pages.rumah.edit', compact('rumah'));
     }
+    
     public function destroy($id)
     {
-        $rumahs = Rumah::findOrFail($id);
-        $rumahs->delete();
+        $rumah = Rumah::findOrFail($id);
+        
+        // Authorization check untuk RW dan RT
+        $user = Auth::user();
+        if ($user->role_id == 3 && $rumah->rw != $user->rw) {
+            abort(403, 'Unauthorized action.');
+        } elseif ($user->role_id == 4 && ($rumah->rt != $user->rt || $rumah->rw != $user->rw)) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        $rumah->delete();
         return redirect('/rumah')->with('success','berhasil hapus');
     }
-
 
     public function store(Request $request)
     {
@@ -58,10 +98,6 @@ class RumahController extends Controller
             $validated['foto_tampak_depan'] = 'rumah/' . $filename;
         }
         
-        // if ($request->hasFile('foto_tampak_depan')) {
-        //     $validated['foto_tampak_depan'] = $request->file('foto_tampak_depan')->store('rumah', 'public');
-        // }
-
         Rumah::create($validated);
 
         return redirect()->route('rumah.index')->with('success', 'Data rumah berhasil ditambahkan');
@@ -70,6 +106,14 @@ class RumahController extends Controller
     public function update(Request $request, $id)
     {
         $rumah = Rumah::findOrFail($id);
+        
+        // Authorization check untuk RW dan RT
+        $user = Auth::user();
+        if ($user->role_id == 3 && $rumah->rw != $user->rw) {
+            abort(403, 'Unauthorized action.');
+        } elseif ($user->role_id == 4 && ($rumah->rt != $user->rt || $rumah->rw != $user->rw)) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $validated = $request->validate([
             'alamat_lengkap' => 'required',
@@ -100,13 +144,6 @@ class RumahController extends Controller
             $file->move(public_path('storage/rumah'), $filename);
             $validated['foto_tampak_depan'] = 'rumah/' . $filename;
         }
-
-        // if ($request->hasFile('foto_tampak_depan')) {
-        //     $validated['foto_tampak_depan'] = $request->file('foto_tampak_depan')->store('rumah', 'public');
-        // }
-
-        // Rumah::findOrFail($id)->update($request->validated());
-        // Rumah::findOrFail($id)->update($validated);
 
         $rumah->update($validated);
 

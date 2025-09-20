@@ -41,7 +41,7 @@ class UserController extends Controller
     }
 
     public function account_list_view() {
-        $users = User::where('role_id', 2)->where('status', '!=','submited')->get();
+        $users = User::where('role_id', '!=',1)->where('status', '!=','submited')->get();
         return view('pages.account-list.index', [
             'users' => $users,
         ]);

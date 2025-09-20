@@ -111,9 +111,12 @@ class PortalController extends Controller
 
         $searchTerm = "%$keyword%";
 
-        // Query untuk Penghuni
+        // Query untuk Penghuni dengan relasi rumah
         $penghuni = Penghuni::query()
-            ->select('id', 'nama', 'nik', 'tgl_lahir', 'no_hp')
+            ->with(['rumah' => function($query) {
+                $query->select('id', 'rt', 'rw');
+            }])
+            ->select('id', 'nama', 'nik', 'tgl_lahir', 'no_hp', 'rumah_id')
             ->where(function($query) use ($searchTerm) {
                 $query->where('nama', 'like', $searchTerm)
                       ->orWhere('nik', 'like', $searchTerm);
@@ -123,12 +126,22 @@ class PortalController extends Controller
             ->map(function($item) {
                 $item->type = 'penghuni';
                 $item->display_name = $item->nama . ' - ' . $item->nik;
+                $item->rt = $item->rumah ? $item->rumah->rt : null;
+                $item->rw = $item->rumah ? $item->rumah->rw : null;
                 return $item;
             });
 
-        // Query untuk Anggota Keluarga
+        // Query untuk Anggota Keluarga dengan relasi ke penghuni dan rumah
         $anggota = AnggotaKeluarga::query()
-            ->select('id', 'nama', 'nik', 'tgl_lahir', 'no_hp')
+            ->with([
+                'penghuni' => function($query) {
+                    $query->select('id', 'rumah_id');
+                },
+                'penghuni.rumah' => function($query) {
+                    $query->select('id', 'rt', 'rw');
+                }
+            ])
+            ->select('id', 'nama', 'nik', 'tgl_lahir', 'no_hp', 'penghuni_id')
             ->where(function($query) use ($searchTerm) {
                 $query->where('nama', 'like', $searchTerm)
                       ->orWhere('nik', 'like', $searchTerm);
@@ -138,6 +151,8 @@ class PortalController extends Controller
             ->map(function($item) {
                 $item->type = 'anggota';
                 $item->display_name = $item->nama . ' - ' . $item->nik;
+                $item->rt = $item->penghuni && $item->penghuni->rumah ? $item->penghuni->rumah->rt : null;
+                $item->rw = $item->penghuni && $item->penghuni->rumah ? $item->penghuni->rumah->rw : null;
                 return $item;
             });
 
@@ -155,6 +170,8 @@ class PortalController extends Controller
             'jenis_surat' => ['required'],
             'keterangan' => ['required'],
             'no_hp' => ['required'],
+            'rt' => ['required'],
+            'rw' => ['required'],
             'email' => ['required', 'email'],
         ]);
 
@@ -177,14 +194,13 @@ class PortalController extends Controller
         $surat->jenis_surat = $request->input('jenis_surat');
         $surat->keterangan = $request->input('keterangan');
         $surat->telepon = $request->input('no_hp');
+        $surat->rt = $request->input('rt');
+        $surat->rw = $request->input('rw');
         $surat->email = $request->input('email');
         $surat->status = 1;
         $surat->saveOrFail();
 
-        // return back()->with('success', 'Permohonan berhasil dikirim!');
-        // return redirect('/#surat')->with('success', 'Permohonan Anda berhasil dikirim!');
         return back()->with('success', 'Permohonan Anda berhasil dikirim!')->withFragment('surat');
-
     }
 
     // Helper method to verify resident data

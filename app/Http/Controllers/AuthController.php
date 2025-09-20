@@ -86,14 +86,22 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => ['required'],
             'email' => ['required', 'email'],
+            'role_id' => ['required'],
+            'rw' => ['nullable'],
+            'rt' => ['nullable'], 
             'password' => ['required'],
         ]);
+        
 
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
-        $user->role_id = 2; // User (penduduk)
+        // $user->role_id = 3; // User (RW)
+        // $user->role_id = 4; // User (RT)
+        $user->role_id = $request->input('role_id');
+        $user->rw = $request->input('rw');
+        $user->rt = $request->input('rt');
         $user->status = 'approved';
         $user->saveOrFail();
 

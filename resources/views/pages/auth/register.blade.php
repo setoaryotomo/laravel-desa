@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,19 +19,18 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('template/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+    <style>
+        .dynamic-field {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gradient-primary">
-    {{-- @if ($errors->any())
-        @dd($errors->all())
-    @endif --}}
     <div class="container">
-
         <!-- Outer Row -->
         <div class="row justify-content-center">
-
             <div class="col-xl-10 col-lg-12 col-md-9">
-
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
@@ -60,6 +58,39 @@
                                             <input type="password" name="password" class="form-control form-control-user"
                                                 id="inputPassword" placeholder="Password">
                                         </div>
+                                        
+                                        <!-- Role Selection -->
+                                        <div class="form-group">
+                                            <label for="role_id">Pilih Role:</label>
+                                            <select class="form-control" id="role_id" name="role_id" required>
+                                                <option value="">-- Pilih Role --</option>
+                                                <option value="3">RW</option>
+                                                <option value="4">RT</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- RW Field (shown for both roles) -->
+                                        <div class="form-group dynamic-field" id="rw-field">
+                                            <label for="rw">RW:</label>
+                                            <select class="form-control" id="rw" name="rw">
+                                                <option value="">-- Pilih RW --</option>
+                                                <?php for($i=1; $i<=10; $i++): ?>
+                                                    <option value="<?= $i ?>"><?= $i ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- RT Field (shown only for RT role) -->
+                                        <div class="form-group dynamic-field" id="rt-field">
+                                            <label for="rt">RT:</label>
+                                            <select class="form-control" id="rt" name="rt">
+                                                <option value="">-- Pilih RT --</option>
+                                                <?php for($i=1; $i<=10; $i++): ?>
+                                                    <option value="<?= $i ?>"><?= $i ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                        
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Simpan
                                         </button>
@@ -74,11 +105,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <!-- Bootstrap core JavaScript-->
@@ -91,6 +119,28 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
 
+    <script>
+        $(document).ready(function() {
+            // Handle role selection change
+            $('#role_id').change(function() {
+                const roleId = $(this).val();
+                
+                // Hide all dynamic fields first
+                $('.dynamic-field').hide();
+                $('.dynamic-field select').prop('required', false);
+                
+                // Show fields based on selected role
+                if (roleId === '3') { // RW
+                    $('#rw-field').show();
+                    $('#rw').prop('required', true);
+                } else if (roleId === '4') { // RT
+                    $('#rw-field').show();
+                    $('#rt-field').show();
+                    $('#rw').prop('required', true);
+                    $('#rt').prop('required', true);
+                }
+            });
+        });
+    </script>
 </body>
-
 </html>

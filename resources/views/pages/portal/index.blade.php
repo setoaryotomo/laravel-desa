@@ -438,7 +438,17 @@
                                            value="{{ old('tgl_lahir') }}" required>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-2">
+                                    <label for="rt-field" class="pb-2">RT</label>
+                                    <input type="text" class="form-control" name="rt" id="inputRt" 
+                                           value="{{ old('rt') }}" required readonly>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="rw-field" class="pb-2">RW</label>
+                                    <input type="text" class="form-control" name="rw" id="inputRw" 
+                                           value="{{ old('rw') }}" required readonly>
+                                </div>
+                                <div class="col-md-2">
                                     <label for="telepon-field" class="pb-2">Nomor Telepon</label>
                                     <input type="text" class="form-control" name="no_hp" id="inputTelepon" 
                                            value="{{ old('no_hp') }}" required readonly>
@@ -607,6 +617,8 @@
             const namaInput = document.getElementById('inputNama');
             const nikInput = document.getElementById('inputNik');
             const teleponInput = document.getElementById('inputTelepon');
+            const rtInput = document.getElementById('inputRt');
+            const rwInput = document.getElementById('inputRw');
             const tglLahirInput = document.getElementById('inputTglLahir');
             const suggestions = document.getElementById('nama-suggestions');
             
@@ -696,6 +708,8 @@
                 nikInput.value = resident.nik;
                 
                 teleponInput.value = resident.no_hp;
+                rtInput.value = resident.rt;
+                rwInput.value = resident.rw;
                 
                 // if (resident.tgl_lahir) {
                 //     tglLahirInput.value = resident.tgl_lahir;

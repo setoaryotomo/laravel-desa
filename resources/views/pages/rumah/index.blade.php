@@ -4,10 +4,55 @@
 {{-- <div class="container-fluid"> --}}
     <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between mb-4">
         <h1 class="h3 mb-2 mb-sm-0 text-gray-800">Data Rumah</h1>
-        <a href="{{ route('rumah.create') }}" class="btn btn-sm btn-primary shadow-sm mt-2 mt-sm-0">
-            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Rumah
-        </a>
+        <div class="d-flex gap-2">
+            @php
+                $user = Auth::user();
+            @endphp
+    
+            {{-- Jika role RW (3) => tampilkan filter RT --}}
+            @if ($user->role_id == 3)
+                <form method="GET" action="{{ route('rumah.index') }}" class="d-flex">
+                    <select name="rt" class="form-control form-control-sm mr-2">
+                        <option value="">Semua RT</option>
+                        @for ($i = 1; $i <= 10; $i++)
+                            <option value="{{ $i }}" {{ request('rt') == $i ? 'selected' : '' }}>RT {{ $i }}</option>
+                        @endfor
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary mr-2">
+                        <i class="fa fa-filter" aria-hidden="true"></i>
+                    </button>
+                </form>
+            @endif
+    
+            {{-- Jika role Admin atau lainnya, tampilkan filter RT & RW --}}
+            @if ($user->role_id != 3 && $user->role_id != 4)
+                <form method="GET" action="{{ route('rumah.index') }}" class="d-flex">
+                    <select name="rt" class="form-control form-control-sm mr-2">
+                        <option value="">Semua RT</option>
+                        @for ($i = 1; $i <= 10; $i++)
+                            <option value="{{ $i }}" {{ request('rt') == $i ? 'selected' : '' }}>RT {{ $i }}</option>
+                        @endfor
+                    </select>
+                    <select name="rw" class="form-control form-control-sm mr-2">
+                        <option value="">Semua RW</option>
+                        @for ($i = 1; $i <= 10; $i++)
+                            <option value="{{ $i }}" {{ request('rw') == $i ? 'selected' : '' }}>RW {{ $i }}</option>
+                        @endfor
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary mr-2">
+                        <i class="fa fa-filter" aria-hidden="true"></i>
+                    </button>
+                </form>
+            @endif
+    
+            {{-- Tambah Rumah (tetap muncul untuk semua role) --}}
+            <a href="{{ route('rumah.create') }}" class="btn btn-sm btn-success shadow-sm">
+                <i class="fas fa-plus fa-sm"></i> <span class="d-none d-md-inline">Tambah Rumah</span>
+            </a>
+        </div>
     </div>
+    
+    
 
     <div class="row">
         <div class="col-12">

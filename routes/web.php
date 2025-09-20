@@ -34,15 +34,15 @@ Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/register', [AuthController::class, 'registerView']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard')->middleware('role:Admin,User');
+Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard')->middleware('role:Admin,User,RW,RT');
 
 // Route Dashboard
 // Route::get('/dashboard', function () {
 //     return view('pages.dashboard');
-// })->name('dashboard')->middleware('role:Admin,User');
+// })->name('dashboard')->middleware('role:Admin,User,RW,RT');
 
 // Route untuk Rumah
-Route::prefix('rumah')->middleware('role:Admin,User')->group(function () {
+Route::prefix('rumah')->middleware('role:Admin,User,RW,RT')->group(function () {
     Route::get('/', [RumahController::class, 'index'])->name('rumah.index');
     Route::get('/create', [RumahController::class, 'create'])->name('rumah.create');
     Route::post('/', [RumahController::class, 'store'])->name('rumah.store');
@@ -75,7 +75,7 @@ Route::prefix('rumah')->middleware('role:Admin,User')->group(function () {
 });
 
 
-Route::prefix('berita')->middleware('role:Admin,User')->group(function () {
+Route::prefix('berita')->middleware('role:Admin,User,RW,RT')->group(function () {
     Route::get('/', [BeritaController::class, 'index'])->name('berita.index');
     Route::get('/create', [BeritaController::class, 'create'])->name('berita.create');
     Route::post('/', [BeritaController::class, 'store'])->name('berita.store');
@@ -85,7 +85,7 @@ Route::prefix('berita')->middleware('role:Admin,User')->group(function () {
     Route::delete('/{berita}', [BeritaController::class, 'destroy'])->name('berita.destroy');
 });
 
-Route::prefix('agenda')->middleware('role:Admin,User')->group(function () {
+Route::prefix('agenda')->middleware('role:Admin,User,RW,RT')->group(function () {
     Route::get('/', [AgendaController::class, 'index'])->name('agenda.index');
     Route::get('/create', [AgendaController::class, 'create'])->name('agenda.create');
     Route::post('/', [AgendaController::class, 'store'])->name('agenda.store');
@@ -95,7 +95,7 @@ Route::prefix('agenda')->middleware('role:Admin,User')->group(function () {
     Route::delete('/{agenda}', [AgendaController::class, 'destroy'])->name('agenda.destroy');
 });
 
-Route::prefix('gallery')->middleware('role:Admin,User')->group(function () {
+Route::prefix('gallery')->middleware('role:Admin,User,RW,RT')->group(function () {
     Route::get('/', [GalleryController::class, 'index'])->name('gallery.index');
     Route::get('/create', [GalleryController::class, 'create'])->name('gallery.create');
     Route::post('/', [GalleryController::class, 'store'])->name('gallery.store');
@@ -105,7 +105,7 @@ Route::prefix('gallery')->middleware('role:Admin,User')->group(function () {
     Route::delete('/{gallery}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
 });
 
-Route::prefix('jenissurat')->middleware('role:Admin,User')->group(function () {
+Route::prefix('jenissurat')->middleware('role:Admin,User,RW,RT')->group(function () {
     Route::get('/', [JenissuratController::class, 'index'])->name('jenissurat.index');
     Route::get('/create', [JenissuratController::class, 'create'])->name('jenissurat.create');
     Route::post('/', [JenissuratController::class, 'store'])->name('jenissurat.store');
@@ -115,7 +115,7 @@ Route::prefix('jenissurat')->middleware('role:Admin,User')->group(function () {
     Route::delete('/{jenissurat}', [JenissuratController::class, 'destroy'])->name('jenissurat.destroy');
 });
 
-Route::prefix('surat')->middleware('role:Admin,User')->group(function () {
+Route::prefix('surat')->middleware('role:Admin,User,RW,RT')->group(function () {
     Route::get('/', [SuratController::class, 'index'])->name('surat.index');
     Route::get('/create', [SuratController::class, 'create'])->name('surat.create');
     Route::post('/', [SuratController::class, 'store'])->name('surat.store');
@@ -136,7 +136,7 @@ Route::get('/account-list', [UserController::class, 'account_list_view'])->middl
 Route::get('/account-request', [UserController::class, 'account_request_view'])->middleware('role:Admin');
 Route::post('/account-request/approval/{id}', [UserController::class, 'account_approval'])->middleware('role:Admin');
 
-Route::get('/profile', [UserController::class, 'profile_view'])->middleware('role:Admin,User');
-Route::post('/profile/{id}', [UserController::class, 'update_profile'])->middleware('role:Admin,User');
-Route::get('/change-password', [UserController::class, 'change_password_view'])->middleware('role:Admin,User');
-Route::post('/change-password/{id}', [UserController::class, 'change_password'])->middleware('role:Admin,User');
+Route::get('/profile', [UserController::class, 'profile_view'])->middleware('role:Admin,User,RW,RT');
+Route::post('/profile/{id}', [UserController::class, 'update_profile'])->middleware('role:Admin,User,RW,RT');
+Route::get('/change-password', [UserController::class, 'change_password_view'])->middleware('role:Admin,User,RW,RT');
+Route::post('/change-password/{id}', [UserController::class, 'change_password'])->middleware('role:Admin,User,RW,RT');

@@ -24,10 +24,11 @@
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
+                                <th class="text-center">Foto</th>
                                 <th>Nama</th>
-                                <th class="text-center">NIK</th>
-                                <th class="text-center">Jenis Kelamin</th>
-                                <th class="text-center">Status Penghuni</th>
+                                {{-- <th class="text-center d-none d-md-table-cell">NIK</th> --}}
+                                {{-- <th class="text-center d-none d-md-table-cell">Jenis Kelamin</th> --}}
+                                <th class="text-center d-none d-lg-table-cell">Status Penghuni</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -35,14 +36,21 @@
                             @foreach($penghunis as $penghuni)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">
+                                    <img src="{{ asset('storage/' . $penghuni->foto) }}" 
+                                         class="img-fluid rounded" 
+                                         style="max-height: 80px; width: auto;">
+                                </td>
                                 <td>
                                     <div class="text-truncate" title="{{ $penghuni->nama }}">
                                         {{ $penghuni->nama }}
                                     </div>
                                 </td>
-                                <td class="text-center">{{ $penghuni->nik }}</td>
-                                <td class="text-truncate">{{ $penghuni->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                                <td class="text-center">
+                                {{-- <td class="text-center d-none d-md-table-cell">{{ $penghuni->nik }}</td> --}}
+                                {{-- <td class="d-none d-md-table-cell">
+                                    {{ $penghuni->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                                </td> --}}
+                                <td class="text-center d-none d-lg-table-cell">
                                     <div class="text-truncate" title="{{ ucwords($penghuni->status_penghuni) }} - {{ $penghuni->is_kepala_keluarga == '1' ? 'Kepala Keluarga' : 'Anggota Keluarga' }}">
                                         {{ ucwords($penghuni->status_penghuni) }} - {{ $penghuni->is_kepala_keluarga == '1' ? 'Kepala Keluarga' : 'Anggota Keluarga' }}
                                     </div>
@@ -75,6 +83,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    
                 </div>
             {{-- </div> --}}
         </div>

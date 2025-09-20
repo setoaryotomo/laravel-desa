@@ -37,7 +37,7 @@
                 'icon' => 'fas fa-fw fa-image',
             ],
             (object) [
-                'title' => 'List Akun',
+                'title' => 'User',
                 'path' => 'account-list',
                 'icon' => 'fas fa-fw fa-user',
             ],
@@ -83,6 +83,11 @@
                 'path' => 'gallery',
                 'icon' => 'fas fa-fw fa-image',
             ],
+            (object) [
+                'title' => 'User',
+                'path' => 'account-list',
+                'icon' => 'fas fa-fw fa-user',
+            ],
         ],
         3 => [
             (object) [
@@ -120,6 +125,11 @@
                 'path' => 'gallery',
                 'icon' => 'fas fa-fw fa-image',
             ],
+            (object) [
+                'title' => 'User',
+                'path' => 'account-list',
+                'icon' => 'fas fa-fw fa-user',
+            ],
         ],
         4 => [
             (object) [
@@ -156,6 +166,11 @@
                 'title' => 'Gallery',
                 'path' => 'gallery',
                 'icon' => 'fas fa-fw fa-image',
+            ],
+            (object) [
+                'title' => 'User',
+                'path' => 'account-list',
+                'icon' => 'fas fa-fw fa-user',
             ],
         ],
     ];

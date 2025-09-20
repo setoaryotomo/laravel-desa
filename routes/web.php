@@ -127,14 +127,26 @@ Route::prefix('surat')->middleware('role:Admin,User,RW,RT')->group(function () {
     Route::delete('/{surat}', [SuratController::class, 'destroy'])->name('surat.destroy');
 });
 
+Route::prefix('account-list')->middleware('role:Admin,User,RW,RT')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('user.index');
+    Route::get('/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/', [UserController::class, 'store'])->name('user.store');
+    Route::get('/{user}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::get('/account-request', [UserController::class, 'account_request_view'])->middleware('role:Admin');
+    Route::post('/account-request/approval/{id}', [UserController::class, 'account_approval'])->middleware('role:Admin');
+});
+
 // Route::post('/permohonan', [SuratController::class, 'permohonan'])->name('permohonan');
 Route::post('/permohonan', [PortalController::class, 'permohonan'])->name('permohonan');
 
 Route::get('/api/autocomplete-resident', [PortalController::class, 'apiAutocompleteResident']);
 
-Route::get('/account-list', [UserController::class, 'account_list_view'])->middleware('role:Admin');
-Route::get('/account-request', [UserController::class, 'account_request_view'])->middleware('role:Admin');
-Route::post('/account-request/approval/{id}', [UserController::class, 'account_approval'])->middleware('role:Admin');
+// Route::get('/account-list', [UserController::class, 'account_list_view'])->middleware('role:Admin');
+// Route::get('/account-request', [UserController::class, 'account_request_view'])->middleware('role:Admin');
+// Route::post('/account-request/approval/{id}', [UserController::class, 'account_approval'])->middleware('role:Admin');
 
 Route::get('/profile', [UserController::class, 'profile_view'])->middleware('role:Admin,User,RW,RT');
 Route::post('/profile/{id}', [UserController::class, 'update_profile'])->middleware('role:Admin,User,RW,RT');

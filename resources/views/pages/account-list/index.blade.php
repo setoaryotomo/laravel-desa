@@ -4,7 +4,9 @@
     {{-- <div class="container"> --}}
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">List Akun</h1>
-
+        <a href="{{ route('user.create') }}" class="btn btn-sm btn-success shadow-sm mt-2">
+            <i class="fas fa-plus fa-sm"></i> <span class="">Tambah user</span>
+        </a>
     </div>
     @if (session('success'))
         <script>
@@ -27,7 +29,7 @@
                                     <th>Nama</th>
                                     <th>Email</th>
                                     {{-- <th>Status</th> --}}
-                                    {{-- <th>Aksi</th> --}}
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,9 +63,27 @@
 
                                             </div>
                                         </td> --}}
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center">
+                                                
+                                                <a href="{{ route('user.edit', $user->id) }}" 
+                                                   class="d-inline-block mr-2 btn btn-sm btn-warning" 
+                                                   title="Edit user">
+                                                    <i class="fas fa-pen"></i> <span class="d-none d-md-inline mr-2">Edit</span>
+                                                </a>
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-danger" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#confirmationDelete-{{ $user->id }}" 
+                                                        title="Hapus user">
+                                                    <i class="fas fa-trash-alt"></i> <span class="d-none d-md-inline mr-2">Hapus</span>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                     @include('pages.account-list.confirmation-approve')
                                     @include('pages.account-list.confirmation-reject')
+                                    @include('pages.account-list.confirmation-delete')
                                 @endforeach
                             </tbody>
                         </table>

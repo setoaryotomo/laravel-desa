@@ -9,6 +9,115 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+
+    public function index()
+{
+    $users = User::where('role_id', '!=', 1)
+                 ->orderBy('created_at', 'asc') // paling lama dulu
+                 ->get();
+
+    return view('pages.account-list.index', compact('users'));
+}
+
+
+
+    public function create()
+    {
+        return view('pages.account-list.create');
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('pages.account-list.edit', compact('user'));
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        
+        
+        $user->delete();
+        return redirect('/account-list')->with('success', 'Berhasil menghapus data user');
+    }
+
+
+    public function store(Request $request) {
+       
+        $validated = $request->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'role_id' => ['required'],
+            'rw' => ['nullable'],
+            'rt' => ['nullable'], 
+            'password' => ['required'],
+        ]);
+        
+
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        // $user->role_id = 3; // User (RW)
+        // $user->role_id = 4; // User (RT)
+        $user->role_id = $request->input('role_id');
+        $user->rw = $request->input('rw');
+        $user->rt = $request->input('rt');
+        $user->status = 'approved';
+        $user->saveOrFail();
+
+        return redirect()->route('user.index');
+    }
+
+    public function update(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => [
+            'required',
+            'email',
+            
+        ],
+        'role_id' => 'required',
+        'rw' => 'nullable',
+        'rt' => 'nullable',
+        'password' => 'nullable|min:8', // kalau tidak diisi, password tidak berubah
+    ]);
+
+    // Update data
+    $user->name = $validated['name'];
+    $user->email = $validated['email'];
+    $user->role_id = $validated['role_id'];
+    $user->rw = $validated['rw'] ?? null;
+    $user->rt = $validated['rt'] ?? null;
+
+    // Atur logika RT/RW
+    if ($validated['role_id'] == 3) {
+        // Role RW → kosongkan RT
+        $user->rt = null;
+    } elseif ($validated['role_id'] == 4) {
+        // Role RT → RW dan RT wajib ada
+        $user->rt = $validated['rt'] ?? null;
+    } else {
+        // Role lain → kosongkan RT & RW
+        $user->rw = null;
+        $user->rt = null;
+    }
+
+    // Update password hanya kalau diisi
+    if (!empty($validated['password'])) {
+        $user->password = Hash::make($validated['password']);
+    }
+
+    $user->save();
+
+    return redirect()->route('user.index')->with('success', 'Data user berhasil diubah');
+}
+
+
+
     public function account_request_view(){
         $users =  User::where('status', 'submited')->get();
         return view('pages.account-request.index', [

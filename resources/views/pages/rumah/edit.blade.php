@@ -7,6 +7,33 @@
     form label{
       font-weight:bold;
     }
+    #map {
+        height: 400px;
+        width: 100%;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+    .map-container {
+        margin-bottom: 20px;
+    }
+    .custom-map-controls {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+    .leaflet-control-geocoder-form input {
+        width: 250px !important;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        padding: 5px 10px;
+    }
+    .leaflet-top.leaflet-right {
+        margin-top: 10px;
+        margin-right: 10px;
+    }
 </style>
 
 <div class="container">
@@ -15,7 +42,6 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Edit Data Rumah</h3>
-                    {{-- <a href="{{ route('rumah.index') }}" class="btn btn-sm btn-secondary float-right">Kembali</a> --}}
                 </div>
 
                 <div class="card-body">
@@ -43,11 +69,9 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                         </div>
 
                         <div class="row mb-3">
-                            
                             <div class="col-md-2">
                                 <label for="no_rumah" class="form-label">Nomor Rumah</label>
                                 <input type="text" class="form-control @error('no_rumah') is-invalid @enderror" 
@@ -60,17 +84,25 @@
 
                             <div class="col-md-2">
                                 <label for="rt" class="form-label">RT</label>
-                                <input type="text" class="form-control @error('rt') is-invalid @enderror" 
-                                       id="rt" name="rt" value="{{ old('rt', $rumah->rt) }}" required>
+                                <select class="form-control @error('rt') is-invalid @enderror" id="rt" name="rt" required>
+                                    <option value="" disabled>Pilih RT</option>
+                                    @for ($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}" {{ old('rt', $rumah->rt) == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
+                                </select>
                                 @error('rt')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
+                            
                             <div class="col-md-2">
                                 <label for="rw" class="form-label">RW</label>
-                                <input type="text" class="form-control @error('rw') is-invalid @enderror" 
-                                       id="rw" name="rw" value="{{ old('rw', $rumah->rw) }}" required>
+                                <select class="form-control @error('rw') is-invalid @enderror" id="rw" name="rw" required>
+                                    <option value="" disabled>Pilih RW</option>
+                                    @for ($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}" {{ old('rw', $rumah->rw) == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
+                                </select>
                                 @error('rw')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -89,8 +121,7 @@
                             <div class="col-md-3">
                                 <label for="kode_pos" class="form-label">Kode Pos</label>
                                 <input type="text" class="form-control @error('kode_pos') is-invalid @enderror" 
-                                       id="kode_pos" name="kode_pos" 
-                                       value="{{ old('kode_pos', $rumah->kode_pos) }}" required>
+                                       id="kode_pos" name="kode_pos" value="50149" readonly>
                                 @error('kode_pos')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -108,11 +139,51 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="lokasi" class="form-label">lokasi</label>
-                                <input type="text" class="form-control @error('lokasi') is-invalid @enderror" 
-                                       id="lokasi" name="lokasi" 
-                                       value="{{ old('lokasi', $rumah->lokasi) }}">
+                                <label for="lokasi" class="form-label">Link Lokasi</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control @error('lokasi') is-invalid @enderror" 
+                                           id="lokasi" name="lokasi" value="{{ old('lokasi', $rumah->lokasi) }}" required readonly>
+                                    <button type="button" class="btn btn-outline-secondary" id="copy-location-link">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
                                 @error('lokasi')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Peta untuk memilih lokasi -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Pilih Lokasi di Peta</label>
+                                <div class="map-container">
+                                    <div id="map"></div>
+                                    <div class="custom-map-controls d-none">
+                                        <button type="button" id="locate-me" class="btn btn-sm btn-info">
+                                            <i class="fas fa-location-arrow"></i> Gunakan Lokasi Saya Sekarang
+                                        </button>
+                                        <small class="text-muted ms-2">Klik pada peta untuk menandai lokasi rumah</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="latitude" class="form-label">Latitude</label>
+                                <input type="text" class="form-control @error('latitude') is-invalid @enderror" 
+                                       id="latitude" name="latitude" value="{{ old('latitude', $rumah->latitude) }}" required readonly>
+                                @error('latitude')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="longitude" class="form-label">Longitude</label>
+                                <input type="text" class="form-control @error('longitude') is-invalid @enderror" 
+                                       id="longitude" name="longitude" value="{{ old('longitude', $rumah->longitude) }}" required readonly>
+                                @error('longitude')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -127,13 +198,13 @@
                                     <img id="current-image-preview" src="{{ asset('storage/' . $rumah->foto_tampak_depan) }}" 
                                          class="img-thumbnail" style="max-width: 300px;">
                                 </a>
-                                    <div class="form-check mt-2" style="display: none">
-                                        <input class="form-check-input" type="checkbox" 
-                                               id="hapus_foto" name="hapus_foto">
-                                        <label class="form-check-label" for="hapus_foto">
-                                            Hapus foto saat disimpan
-                                        </label>
-                                    </div>
+                                <div class="form-check mt-2 d-none">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="hapus_foto" name="hapus_foto">
+                                    <label class="form-check-label" for="hapus_foto">
+                                        Hapus foto saat disimpan
+                                    </label>
+                                </div>
                                 @endif
                             </div>
                             
@@ -144,10 +215,13 @@
                             @error('foto_tampak_depan')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div id="new-image-preview" class="mt-3 d-none">
+                                <h6>Preview Gambar Baru:</h6>
+                                <img src="" class="img-thumbnail" style="max-width: 300px;">
+                            </div>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            {{-- <button type="reset" class="btn btn-secondary me-md-2">Reset Perubahan</button> --}}
                             <a href="{{ route('rumah.index') }}" ><button type="button" class="btn btn-secondary me-md-2 mr-1">Kembali</button></a>
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         </div>
@@ -158,37 +232,110 @@
     </div>
 </div>
 
-<!-- Script untuk menampilkan preview gambar baru -->
+<!-- Load Leaflet CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Leaflet Control Geocoder -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<!-- Load Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
 <script>
-    document.getElementById('foto_tampak_depan').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const container = document.getElementById('image-preview-container');
-                
-                // Hide current image if exists
-                const currentPreview = document.getElementById('current-image-preview');
-                if (currentPreview) currentPreview.style.display = 'none';
-                
-                // Check if new preview already exists
-                let newPreview = document.getElementById('new-image-preview');
-                
-                if (!newPreview) {
-                    // Create new preview if doesn't exist
-                    newPreview = document.createElement('img');
-                    newPreview.id = 'new-image-preview';
-                    newPreview.className = 'img-thumbnail';
-                    newPreview.style.maxWidth = '300px';
-                    container.insertBefore(newPreview, container.firstChild);
-                }
-                
-                // Set the new image source
-                newPreview.src = e.target.result;
-                newPreview.style.display = 'block';
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi peta
+        const map = L.map('map').setView([
+            {{ old('latitude', $rumah->latitude ?? -7.0051) }}, 
+            {{ old('longitude', $rumah->longitude ?? 110.4381) }}
+        ], 13);
+
+        // Tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        let marker = null;
+
+        // Fungsi untuk menempatkan marker
+        function placeMarker(lat, lng) {
+            if (marker) {
+                map.removeLayer(marker);
             }
-            reader.readAsDataURL(file);
+            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            marker.on('dragend', function() {
+                const pos = marker.getLatLng();
+                updateCoordinates(pos.lat, pos.lng);
+            });
+            updateCoordinates(lat, lng);
         }
+
+        // Fungsi untuk mengupdate koordinat di form
+        function updateCoordinates(lat, lng) {
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+            document.getElementById('lokasi').value = `https://www.google.com/maps?q=${lat},${lng}`;
+        }
+
+        // Tempatkan marker awal berdasarkan data yang ada
+        @if($rumah->latitude && $rumah->longitude)
+            placeMarker({{ $rumah->latitude }}, {{ $rumah->longitude }});
+        @endif
+
+        // Klik peta
+        map.on('click', function(e) {
+            placeMarker(e.latlng.lat, e.latlng.lng);
+        });
+
+        // Locate Me
+        document.getElementById('locate-me').addEventListener('click', function() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    map.setView([lat, lng], 15);
+                    placeMarker(lat, lng);
+                }, function() {
+                    alert('Tidak bisa mendapatkan lokasi Anda.');
+                });
+            }
+        });
+
+        // Copy link lokasi
+        document.getElementById('copy-location-link').addEventListener('click', function() {
+            const locationInput = document.getElementById('lokasi');
+            locationInput.select();
+            document.execCommand('copy');
+            alert('Link lokasi berhasil disalin!');
+        });
+
+        // Preview gambar baru
+        document.getElementById('foto_tampak_depan').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('new-image-preview');
+                    preview.classList.remove('d-none');
+                    preview.querySelector('img').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Search box (Leaflet Control Geocoder)
+        const geocoder = L.Control.geocoder({
+            defaultMarkGeocode: false
+        })
+        .on('markgeocode', function(e) {
+            const bbox = e.geocode.bbox;
+            const center = e.geocode.center;
+            map.fitBounds(bbox);
+            placeMarker(center.lat, center.lng);
+        })
+        .addTo(map);
     });
 </script>
+
 @endsection

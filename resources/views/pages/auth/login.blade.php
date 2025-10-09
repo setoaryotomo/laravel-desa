@@ -32,6 +32,28 @@
                 width: 100% !important;
             }
         }
+        
+        /* Password input group styling */
+        .password-input-group {
+            position: relative;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6c757d;
+            z-index: 10;
+        }
+        .password-toggle:hover {
+            color: #495057;
+        }
+        .form-control-user {
+            padding-right: 45px !important;
+        }
     </style>
 </head>
 
@@ -68,9 +90,14 @@
                                                 placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="password"
-                                                class="form-control form-control-user" id="inputPassword"
-                                                placeholder="Password">
+                                            <div class="password-input-group">
+                                                <input type="password" name="password"
+                                                    class="form-control form-control-user" id="inputPassword"
+                                                    placeholder="Password">
+                                                <button type="button" class="password-toggle" data-target="inputPassword">
+                                                    <i class="fas fa-eye-slash"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
@@ -99,6 +126,29 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            document.querySelectorAll('.password-toggle').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordInput = document.getElementById(targetId);
+                    const icon = this.querySelector('i');
+                    
+                    if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+                });
+            });
+        });
+    </script>
 
 </body>
 

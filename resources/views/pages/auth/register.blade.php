@@ -23,10 +23,32 @@
         .dynamic-field {
             display: none;
         }
+        
+        /* Password input group styling */
+        .password-input-group {
+            position: relative;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6c757d;
+            z-index: 10;
+        }
+        .password-toggle:hover {
+            color: #495057;
+        }
+        .form-control-user {
+            padding-right: 45px !important;
+        }
     </style>
 </head>
 
-<body class="bg-gradient-primary">
+<body class="">
     <div class="container">
         <!-- Outer Row -->
         <div class="row justify-content-center">
@@ -34,9 +56,9 @@
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                            <div class="col-lg-6">
+                        <div class="row justify-content-center">
+                            {{-- <div class="col-lg-6 d-none d-lg-block bg-login-image"></div> --}}
+                            <div class="col-lg-8">
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Registrasi</h1>
@@ -55,8 +77,13 @@
                                                 placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="password" class="form-control form-control-user"
-                                                id="inputPassword" placeholder="Password">
+                                            <div class="password-input-group">
+                                                <input type="password" name="password" class="form-control form-control-user"
+                                                    id="inputPassword" placeholder="Password">
+                                                <button type="button" class="password-toggle" data-target="inputPassword">
+                                                    <i class="fas fa-eye-slash"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                         
                                         <!-- Role Selection -->
@@ -138,6 +165,22 @@
                     $('#rt-field').show();
                     $('#rw').prop('required', true);
                     $('#rt').prop('required', true);
+                }
+            });
+
+            // Toggle password visibility
+            $('.password-toggle').click(function() {
+                const targetId = $(this).data('target');
+                const passwordInput = $('#' + targetId);
+                const icon = $(this).find('i');
+                
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                    
+                } else {
+                    passwordInput.attr('type', 'password');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
                 }
             });
         });

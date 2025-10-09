@@ -10,6 +10,24 @@
     .dynamic-field {
         display: none;
     }
+    /* Password input group styling */
+    .password-input-group {
+        position: relative;
+    }
+    .password-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #6c757d;
+        z-index: 10;
+    }
+    .password-toggle:hover {
+        color: #495057;
+    }
 </style>
 
 <div class="container">
@@ -47,8 +65,13 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                       id="password" name="password" value="{{ old('password') }}" required>
+                                <div class="password-input-group">
+                                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                                           id="password" name="password" value="{{ old('password') }}" required>
+                                    <button type="button" class="password-toggle" data-target="password">
+                                        <i class="fas fa-eye-slash"></i>
+                                    </button>
+                                </div>
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -146,8 +169,26 @@
         
         // Add event listener for role selection change
         roleSelect.addEventListener('change', handleRoleChange);
+
+        // Toggle password visibility
+        document.querySelectorAll('.password-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const passwordInput = document.getElementById(targetId);
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
+        });
     });
 </script>
-
 
 @endsection
